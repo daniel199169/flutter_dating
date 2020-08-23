@@ -4,7 +4,11 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nubae/authentication/authentication.dart';
 import 'package:nubae/screens/view/constants.dart';
-import 'package:nubae/screens/view/homepage.dart';
+import 'package:nubae/screens/view/login.dart';
+import 'package:nubae/screens/custom_widgets/fade_transition.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:nubae/utils/static_data_service.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -12,8 +16,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
-
+  LatLng _pubLatLang;
 //  _textControllers
 
   TextEditingController _userNameController = TextEditingController();
@@ -23,28 +26,51 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _raceController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
   TextEditingController _countryController = TextEditingController();
-
+  TextEditingController _nubaeAddressLocationController =
+      TextEditingController();
   bool _male = false;
 
-
   _register() async {
-    if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _ageController.text.isNotEmpty && _raceController.text.isNotEmpty){
-      var resonse = await signUp(_emailController.text, _passwordController.text, _userNameController.text, int.parse(_ageController.text), _male, _raceController.text, _countryController.text, _cityController.text);
-      if(resonse is bool)return Fluttertoast.showToast(msg: "Couldn't sign you in");
-      Navigator.of(context).push(CupertinoPageRoute(builder: (context)=> HomePage()));
-    }
-    else{
+    if (_emailController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty &&
+        _ageController.text.isNotEmpty &&
+        _raceController.text.isNotEmpty) {
+      var resonse = await signUp(
+          _emailController.text,
+          _passwordController.text,
+          _userNameController.text,
+          int.parse(_ageController.text),
+          _male,
+          _raceController.text,
+          _countryController.text,
+          _cityController.text);
+      if (resonse is bool)
+        return Fluttertoast.showToast(msg: "Couldn't sign you in");
+
+      Navigator.push(context, FadeRoute(page: LoginPage()));
+    } else {
       Fluttertoast.showToast(msg: "Fill All Areas to continue");
     }
   }
 
+  _showLocationPicker() async {
+    LocationResult result = await showLocationPicker(
+      context,
+      StaticDataService.API_KEY,
+      initialCenter: LatLng(31.1975844, 29.9598339),
+      myLocationButtonEnabled: true,
+      layersButtonEnabled: true,
+    );
+    _nubaeAddressLocationController.text = result.address;
+    setState(() {
+      _pubLatLang = result.latLng;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = getWidth(context);
     final height = getHeight(context);
-
-
 
     // TODO: implement build
     return Scaffold(
@@ -75,7 +101,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             "Create Account",
                             style: welcomeStyle,
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             "match and date TODAY!!!",
                             style: loginTextStyle,
@@ -92,10 +120,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               controller: _userNameController,
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.person,color: Colors.white), hintStyle: TextStyle(color: Colors.white), hintText: "User Name"),
+                                  icon: Icon(Icons.person, color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  hintText: "User Name"),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             color: Colors.black.withOpacity(0.5),
@@ -103,10 +135,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: TextStyle(color: Colors.white),
                               controller: _emailController,
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.email,color: Colors.white), hintStyle: TextStyle(color: Colors.white), hintText: "Email Address"),
+                                  icon: Icon(Icons.email, color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  hintText: "Email Address"),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Container(
                             color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(horizontal: 8),
@@ -114,10 +150,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: TextStyle(color: Colors.white),
                               controller: _passwordController,
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.lock,color: Colors.white), hintStyle: TextStyle(color: Colors.white), hintText: "Password"),
+                                  icon: Icon(Icons.lock, color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  hintText: "Password"),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Container(
                             color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(horizontal: 8),
@@ -125,20 +165,29 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: TextStyle(color: Colors.white),
                               controller: _ageController,
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.calendar_today,color: Colors.white), hintStyle: TextStyle(color: Colors.white), hintText: "Age"),
+                                  icon: Icon(Icons.calendar_today,
+                                      color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  hintText: "Age"),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Container(
                             color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: TextField(
                               style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.public,color: Colors.white), hintStyle: TextStyle(color: Colors.white), hintText: "Country"),
+                                  icon: Icon(Icons.public, color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  hintText: "Country"),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Container(
                             color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(horizontal: 8),
@@ -146,10 +195,76 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: TextStyle(color: Colors.white),
                               controller: _cityController,
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.location_searching,color: Colors.white), hintStyle: TextStyle(color: Colors.white), hintText: "City"),
+                                  icon: Icon(Icons.location_searching,
+                                      color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  hintText: "City"),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            onTap: () async {
+                              await _showLocationPicker();
+                            },
+                            autofocus: false,
+                            controller: _nubaeAddressLocationController,
+                            onSaved: (String value) {
+                              // _onSaved(value, 'Set Location on Map');
+                            },
+                            validator: (String value) {
+                              // return _onValidate(value, 'Set Location on Map');
+                            },
+                            obscureText: false,
+                            cursorColor: Theme.of(context).primaryColor,
+                            style: TextStyle(
+                              color: Colors.black54,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Set Location on Map',
+                              isDense: true,
+                              fillColor: Colors.grey[200],
+                              filled: true,
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    await _showLocationPicker();
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 5),
+                                    width: MediaQuery.of(context).size.width *
+                                        0.01,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.01,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.location_on,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 15.0,
+                                vertical: 12.0,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Container(
                             color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(horizontal: 8),
@@ -157,54 +272,70 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: TextStyle(color: Colors.white),
                               controller: _raceController,
                               decoration: InputDecoration(
-                                  icon: Icon(Icons.face,color: Colors.white), hintStyle: TextStyle(color: Colors.white), hintText: "Race"),
+                                  icon: Icon(Icons.face, color: Colors.white),
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  hintText: "Race"),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Container(
                             width: width,
                             height: 50,
                             padding: EdgeInsets.all(0),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.orange
-                            ),
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.orange),
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
-                                    onTap: (){
+                                    onTap: () {
                                       setState(() {
                                         _male = false;
                                       });
                                     },
                                     child: Container(
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
-                                            color: _male? Colors.transparent: Colors.white
-                                        ),
-                                      height: 50,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: _male
+                                                ? Colors.transparent
+                                                : Colors.white),
+                                        height: 50,
                                         width: width * 0.45,
                                         alignment: Alignment.center,
-                                        child: Text("I'm a Woman",style: TextStyle(fontWeight: FontWeight.bold),)),
+                                        child: Text(
+                                          "I'm a Woman",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )),
                                   ),
                                   InkWell(
-                                    onTap: (){
+                                    onTap: () {
                                       setState(() {
                                         _male = true;
                                       });
                                     },
                                     child: Container(
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
-                                            color: !_male? Colors.transparent: Colors.white
-                                        ),
-                                      height: 50,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: !_male
+                                                ? Colors.transparent
+                                                : Colors.white),
+                                        height: 50,
                                         width: width * 0.45,
                                         alignment: Alignment.center,
-                                        child: Text("I'm a Man",style: TextStyle(fontWeight: FontWeight.bold),)),
+                                        child: Text(
+                                          "I'm a Man",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )),
                                   ),
                                 ],
                               ),
@@ -224,21 +355,25 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(
+                            height: 15,
+                          ),
                           InkWell(
-                            onTap: ()=> Navigator.of(context).pop(),
+                            onTap: () => Navigator.of(context).pop(),
                             child: Container(
                               width: width,
                               padding: EdgeInsets.all(8),
                               alignment: Alignment.center,
                               child: FittedBox(
-                                  fit: BoxFit.fitWidth,child: Text("Already have an account? Login Here",style: loginTextStyle,)),
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                    "Already have an account? Login Here",
+                                    style: loginTextStyle,
+                                  )),
                             ),
                           )
                         ],
-                      )
-
-                      ,
+                      ),
 //                    Column(
 //                      children: [
 //                        Text(
@@ -247,7 +382,6 @@ class _RegisterPageState extends State<RegisterPage> {
 //                        ),
 //                      ],
 //                    ),
-
 
 //                    Column(
 //                      children: [
@@ -274,30 +408,34 @@ class _RegisterPageState extends State<RegisterPage> {
 //                      alignment: Alignment.center,
 //                      child: Text("Don't have an account? Register Here",style: loginTextStyle,),
 //                    )
-
                     ],
                   ),
                 ),
               ),
             ),
             Positioned(
-              top: 30,
-              left: 10,
-              child: InkWell(
-                onTap: (){
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios,color: Colors.white,),
-                      Text("Back",style: TextStyle(color: Colors.white),)
-                    ],
+                top: 30,
+                left: 10,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          "Back",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            )
+                ))
           ],
         ),
       ),

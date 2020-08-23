@@ -4,10 +4,10 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/screens/view/forgotpassword.dart';
-import 'package:nubae/screens/view/homepage.dart';
 import 'package:nubae/screens/view/register.dart';
 import 'package:nubae/authentication/authentication.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
+import 'package:nubae/screens/view/search.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response is bool) {
         Fluttertoast.showToast(msg: "Couldn't sign you in");
       } else {
-         Navigator.push(context, FadeRoute(page: HomePage()));
+         Navigator.push(context, FadeRoute(page: SearchPage()));
         
       }
     }

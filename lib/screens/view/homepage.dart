@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     welcomeImages = [
     "assets/images/welcome0.jpg",
     "assets/images/welcome1.jpg",
+    "assets/images/placeholderProfileImage.jpg",
     "assets/images/welcome3.jpg",
     "assets/images/welcome4.jpg",
     "assets/images/welcome0.jpg"

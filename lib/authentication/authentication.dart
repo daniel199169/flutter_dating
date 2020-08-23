@@ -17,12 +17,14 @@ Future signUp(String email, String password,String username,int age,bool maleGen
   try{
     var user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
     await Firestore.instance.collection("Users").document(user.user.uid).setData({
-      "age": age,
+      "email": email,
       "userName": username,
+      "age": age,
       "male": maleGender,
       "race": race,
       "country": country,
-      "city": city
+      "city": city,
+      
     });
     return user.user;
   }

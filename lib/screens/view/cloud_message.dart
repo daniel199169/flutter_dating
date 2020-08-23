@@ -91,7 +91,7 @@ class _MessageHandlerState extends State<MessageHandler> {
         msg: "Notification Clicked",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: Colors.black54,
         textColor: Colors.white,
         fontSize: 16.0);
@@ -119,7 +119,7 @@ class _MessageHandlerState extends State<MessageHandler> {
                   msg: "Notification Clicked",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
-                  timeInSecForIos: 1,
+                  timeInSecForIosWeb: 1,
                   backgroundColor: Colors.black54,
                   textColor: Colors.white,
                   fontSize: 16.0);

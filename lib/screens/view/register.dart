@@ -24,7 +24,6 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
   TextEditingController _raceController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
   TextEditingController _countryController = TextEditingController();
   TextEditingController _nubaeAddressLocationController =
       TextEditingController();
@@ -43,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _male,
           _raceController.text,
           _countryController.text,
-          _cityController.text);
+          _nubaeAddressLocationController.text);
       if (resonse is bool)
         return Fluttertoast.showToast(msg: "Couldn't sign you in");
 
@@ -188,77 +187,22 @@ class _RegisterPageState extends State<RegisterPage> {
                           SizedBox(
                             height: 15,
                           ),
-                          Container(
-                            color: Colors.black.withOpacity(0.5),
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: TextField(
-                              style: TextStyle(color: Colors.white),
-                              controller: _cityController,
-                              decoration: InputDecoration(
-                                  icon: Icon(Icons.location_searching,
-                                      color: Colors.white),
-                                  hintStyle: TextStyle(color: Colors.white),
-                                  hintText: "City"),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            onTap: () async {
-                              await _showLocationPicker();
+                          GestureDetector(
+                            onTap: () {
+                              _showLocationPicker();
                             },
-                            autofocus: false,
-                            controller: _nubaeAddressLocationController,
-                            onSaved: (String value) {
-                              // _onSaved(value, 'Set Location on Map');
-                            },
-                            validator: (String value) {
-                              // return _onValidate(value, 'Set Location on Map');
-                            },
-                            obscureText: false,
-                            cursorColor: Theme.of(context).primaryColor,
-                            style: TextStyle(
-                              color: Colors.black54,
-                            ),
-                            decoration: InputDecoration(
-                              labelText: 'Set Location on Map',
-                              isDense: true,
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    await _showLocationPicker();
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 5, vertical: 5),
-                                    width: MediaQuery.of(context).size.width *
-                                        0.01,
-                                    height: MediaQuery.of(context).size.width *
-                                        0.01,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)),
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.location_on,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
+                            child: Container(
+                              color: Colors.black.withOpacity(0.5),
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: IgnorePointer(
+                                child: TextField(
+                                  style: TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
+                                      icon: Icon(Icons.location_searching,
+                                          color: Colors.white),
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      hintText: "Set Location on Map"),
                                 ),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15.0,
-                                vertical: 12.0,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),

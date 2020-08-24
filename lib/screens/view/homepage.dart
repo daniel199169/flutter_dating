@@ -78,8 +78,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
                 InkWell(
-                  onTap: () => Navigator.of(context).push(
-                      CupertinoPageRoute(builder: (context) => ProfilePage())),
+                  onTap: () =>Navigator.push(context, FadeRoute(page: ProfilePage())),
                   child: Column(
                     children: [
                       CircleAvatar(

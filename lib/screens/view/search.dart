@@ -4,6 +4,7 @@ import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:nubae/screens/view/homepage.dart';
 import 'package:nubae/firebase_services/user_manager.dart';
+import 'package:nubae/firebase_services/profile_manager.dart';
 
 class SearchPage extends StatefulWidget {
   final String uid;
@@ -17,23 +18,31 @@ enum Gender { male, female }
 class _SearchPageState extends State<SearchPage> {
   List<ExploreProfile> searchData = [];
   double _currentSliderValue = 20;
-
+  
   Gender _character = Gender.male;
   RangeValues _currentRangeValues = const RangeValues(0, 40);
 
   String _cuisineValue = "Brunch";
   String _entertainmentValue = "Happy hour";
   String _recreationValue = "Gym";
+  double myLatitude = 0.0;
+  double myLongitude = 0.0;
+
 
   @override
   void initState() {
     // TODO: implement initState
-    getLocation();
+    getCoordinate();
     super.initState();
   }
 
-  getLocation() async {
-    
+  getCoordinate() async {
+    double _mylat = await ProfileManager.getLatitude(widget.uid);
+    double _mylon = await ProfileManager.getLongitude(widget.uid);
+    setState(() {
+      myLatitude = _mylat;
+      myLongitude = _mylon;
+    });
   }
 
   findDate() async {
@@ -52,7 +61,10 @@ class _SearchPageState extends State<SearchPage> {
         male,
         _cuisineValue,
         _entertainmentValue,
-        _recreationValue);
+        _recreationValue,
+        myLatitude,
+        myLongitude,
+        widget.uid);
 
     Navigator.push(context,
         FadeRoute(page: HomePage(uid: widget.uid, searchData: searchData)));

@@ -23,7 +23,7 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   getData() async {
-    var _data = await UserManager.getData();
+    var _data = await UserManager.getData(widget.uid);
     setState(() {
       data = _data;
       print("********  --------   ********");

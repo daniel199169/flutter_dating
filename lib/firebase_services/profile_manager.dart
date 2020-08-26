@@ -70,6 +70,32 @@ class ProfileManager {
     }
   }
 
+   static getLatitude(String uid) async {
+    QuerySnapshot querySnapshot = await db
+        .collection("Users")
+        .where('uid', isEqualTo: uid)
+        .getDocuments();
+
+    if (querySnapshot.documents[0]['latitude'] == null) {
+      return 0.0;
+    } else {
+      return querySnapshot.documents[0]['latitude'];
+    }
+  }
+
+   static getLongitude(String uid) async {
+    QuerySnapshot querySnapshot = await db
+        .collection("Users")
+        .where('uid', isEqualTo: uid)
+        .getDocuments();
+
+    if (querySnapshot.documents[0]['longitude'] == null) {
+      return 0.0;
+    } else {
+      return querySnapshot.documents[0]['longitude'];
+    }
+  }
+
   static Future<String> getHobbyCuisine(String uid) async {
     QuerySnapshot querySnapshot = await db
         .collection("Users")

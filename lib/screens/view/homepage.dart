@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, FadeRoute(page: ExplorePage()));
+                    Navigator.push(context, FadeRoute(page: ExplorePage(uid: widget.uid)));
                     // Navigator.of(context).push(CupertinoPageRoute(
                     //     builder: (context) => ExplorePage()));
                   },

@@ -6,8 +6,8 @@ class StaticDataService {
   static const double CAMERA_TILT = 80;
   static const double CAMERA_BEARING = 30;
   static const double CAMERA_ZOOM = 15;
-  static const String API_KEY = 'AIzaSyBIAAC2DJx3v44z-ZJQBDhz-Jrg-UBvc8A';
-  // static const String API_KEY = 'AIzaSyDDKhCcR7MJANjnr8EFZ0BkfrPiPExVtEE';
+  
+  static const String API_KEY = 'AIzaSyBKV-ZSMX1OaYkIDWC2ejvpURfabiglkYY';
   
   static const String TWITTER_KEY = 'IfcWffzMiS2aa0fcG2uOFxPLu';
   static const String TWITTER_SECRET =

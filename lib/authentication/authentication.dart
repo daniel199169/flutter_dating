@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nubae/firebase_services/basic_firebase.dart';
+import 'package:nubae/models/ProfileImages.dart';
 
 abstract class BaseAuth {
   // Future<String> signIn(String email, String password);
@@ -52,6 +53,7 @@ class DateAuth implements BaseAuth {
         email: email, password: password);
     print(result);
     FirebaseUser user = result.user;
+    ProfileImages images = new ProfileImages(myimageURL: "", myphoto1URL: "", myphoto2URL: "", myphoto3URL: "");
     try {
       await Firestore.instance
           .collection("Users")
@@ -67,6 +69,10 @@ class DateAuth implements BaseAuth {
             "city": city,
             "latitude": userlocation.latitude,
             "longitude": userlocation.longitude,
+            "images": images.toJson(),
+            "Cuisine": "",
+            "Entertainment": "",
+            "Recreation": "",
           })
           .then((result) => {})
           .catchError((err) => print(err));

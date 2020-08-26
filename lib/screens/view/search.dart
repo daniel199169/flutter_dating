@@ -15,25 +15,47 @@ class SearchPage extends StatefulWidget {
 enum Gender { male, female }
 
 class _SearchPageState extends State<SearchPage> {
-  List<ExploreProfile> searchData;
+  List<ExploreProfile> searchData = [];
   double _currentSliderValue = 20;
 
   Gender _character = Gender.male;
-  RangeValues _currentRangeValues = const RangeValues(40, 80);
+  RangeValues _currentRangeValues = const RangeValues(0, 40);
 
-  String _cuisineValue = "";
-  String _entertainmentValue = "";
-  String _recreationValue = "";
+  String _cuisineValue = "Brunch";
+  String _entertainmentValue = "Happy hour";
+  String _recreationValue = "Gym";
 
   @override
   void initState() {
     // TODO: implement initState
+    getLocation();
     super.initState();
   }
 
+  getLocation() async {
+    
+  }
+
   findDate() async {
-     await UserManager.searchData(_currentSliderValue, _currentRangeValues.start, _currentRangeValues.end, _character, _cuisineValue, _entertainmentValue, _recreationValue);
-    Navigator.push(context, FadeRoute(page: HomePage(uid: widget.uid)));
+    bool male;
+
+    if (_character.toString() == "Gender.male") {
+      male = true;
+    } else {
+      male = false;
+    }
+
+    searchData = await UserManager.searchData(
+        _currentSliderValue,
+        _currentRangeValues.start,
+        _currentRangeValues.end,
+        male,
+        _cuisineValue,
+        _entertainmentValue,
+        _recreationValue);
+
+    Navigator.push(context,
+        FadeRoute(page: HomePage(uid: widget.uid, searchData: searchData)));
   }
 
   @override
@@ -155,7 +177,7 @@ class _SearchPageState extends State<SearchPage> {
                           _cuisineValue = newValue;
                         });
                       },
-                      items: ["", "Brunch", "Lunch", "Dinner"]
+                      items: ["Brunch", "Lunch", "Dinner"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,
@@ -184,7 +206,7 @@ class _SearchPageState extends State<SearchPage> {
                           _entertainmentValue = newValue;
                         });
                       },
-                      items: ["", "Happy hour", "Hookah", "Movies", "Mall"]
+                      items: ["Happy hour", "Hookah", "Movies", "Mall"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,
@@ -213,7 +235,7 @@ class _SearchPageState extends State<SearchPage> {
                           _recreationValue = newValue;
                         });
                       },
-                      items: ["", "Gym", "Park", "Biking", "Running"]
+                      items: ["Gym", "Park", "Biking", "Running"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,

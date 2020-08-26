@@ -13,10 +13,13 @@ import 'package:nubae/screens/view/login.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:nubae/models/ProfileImages.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
+import 'package:nubae/models/ExploreProfile.dart';
 
 class HomePage extends StatefulWidget {
   final String uid;
-  HomePage({this.uid});
+  final List<ExploreProfile> searchData;
+
+  HomePage({this.uid, this.searchData});
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -26,21 +29,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   var currentPageValue = 0.0;
 
   CardController controller;
-  List<String> welcomeImages = [];
+
   ProfileImages myimages;
 
   @override
   void initState() {
     // TODO: implement initState
 
-    welcomeImages = [
-      "assets/images/welcome0.jpg",
-      "assets/images/welcome1.jpg",
-      "assets/images/placeholderProfileImage.jpg",
-      "assets/images/welcome3.jpg",
-      "assets/images/welcome4.jpg",
-      "assets/images/welcome0.jpg"
-    ];
     super.initState();
     myimages = new ProfileImages(
         myimageURL: '', myphoto1URL: '', myphoto2URL: '', myphoto3URL: '');
@@ -301,7 +296,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     swipeUp: true,
                     swipeDown: true,
                     orientation: AmassOrientation.BOTTOM,
-                    totalNum: welcomeImages.length,
+                    totalNum: widget.searchData.length,
                     stackNum: 4,
                     swipeEdge: 4.0,
                     maxWidth: MediaQuery.of(context).size.width,
@@ -315,17 +310,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                               image: DecorationImage(
-                                  image: AssetImage('${welcomeImages[index]}'),
+                                  image: NetworkImage(
+                                      '${widget.searchData[index].myimage.myimageURL}'),
                                   fit: BoxFit.cover)),
                           alignment: Alignment.bottomCenter,
                           child: ListTile(
                             leading: CircleAvatar(child: Icon(Icons.person)),
                             title: Text(
-                              "Amy WhiteField",
+                              widget.searchData[index].userName,
                               style: cardTextStyle,
                             ),
                             subtitle: Text(
-                              "Texas USA",
+                              widget.searchData[index].city,
                               style: cardLocationStyle,
                             ),
                           )),

@@ -1,36 +1,79 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:nubae/firebase_services/basic_firebase.dart';
 
-Future logUserIn(String email,String password) async {
-  try{
-    var response = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-    return response.user;
+abstract class BaseAuth {
+  // Future<String> signIn(String email, String password);
+  Future<String> signIn(String email, String password);
 
-  }
-  catch(er){
-    print(er);
-    return false;
-  }
+  Future<String> signUp(
+      String email,
+      String password,
+      String username,
+      int age,
+      bool maleGender,
+      String race,
+      String country,
+      String city,
+      LatLng userlocation);
+
+  // Future<bool> signOut();
+
 }
 
-Future signUp(String email, String password,String username,int age,bool maleGender, String race, String country,String city) async {
-  try{
-    var user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-    await Firestore.instance.collection("Users").document(user.user.uid).setData({
-      "email": email,
-      "userName": username,
-      "age": age,
-      "male": maleGender,
-      "race": race,
-      "country": country,
-      "city": city,
-      
-    });
-    return user.user;
-  }
-  catch(er){
-    print(er);
-    return false;
+class DateAuth implements BaseAuth {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  Future<String> signIn(String email, String password) async {
+    try {
+      AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      FirebaseUser user = result.user;
+      print('--------><-------: Firebase User: ' + user.toString());
+      return user.uid;
+    } catch (er) {
+      print(er);
+      return null;
+    }
+  }
+
+  Future<String> signUp(
+      String email,
+      String password,
+      String username,
+      int age,
+      bool maleGender,
+      String race,
+      String country,
+      String city,
+      LatLng userlocation) async {
+    AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    print(result);
+    FirebaseUser user = result.user;
+    try {
+      await Firestore.instance
+          .collection("Users")
+          .document(user.uid)
+          .setData({
+            "uid": user.uid,
+            "userName": username,
+            "email": email,
+            "age": age,
+            "male": maleGender,
+            "race": race,
+            "country": country,
+            "city": city,
+            "latitude": userlocation.latitude,
+            "longitude": userlocation.longitude,
+          })
+          .then((result) => {})
+          .catchError((err) => print(err));
+      return user.uid;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

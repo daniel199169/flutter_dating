@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nubae/models/ExploreProfile.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:nubae/screens/view/homepage.dart';
+import 'package:nubae/firebase_services/user_manager.dart';
 
 class SearchPage extends StatefulWidget {
+  final String uid;
+  SearchPage({this.uid});
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -11,19 +15,25 @@ class SearchPage extends StatefulWidget {
 enum Gender { male, female }
 
 class _SearchPageState extends State<SearchPage> {
+  List<ExploreProfile> searchData;
   double _currentSliderValue = 20;
 
   Gender _character = Gender.male;
   RangeValues _currentRangeValues = const RangeValues(40, 80);
 
-  String _cuisineValue = "Brunch";
-  String _entertainmentValue = "Happy hour";
-  String _recreationValue = "Gym";
+  String _cuisineValue = "";
+  String _entertainmentValue = "";
+  String _recreationValue = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  findDate() async {
+     await UserManager.searchData(_currentSliderValue, _currentRangeValues.start, _currentRangeValues.end, _character, _cuisineValue, _entertainmentValue, _recreationValue);
+    Navigator.push(context, FadeRoute(page: HomePage(uid: widget.uid)));
   }
 
   @override
@@ -145,7 +155,7 @@ class _SearchPageState extends State<SearchPage> {
                           _cuisineValue = newValue;
                         });
                       },
-                      items: ["Brunch", "Lunch", "Dinner"]
+                      items: ["", "Brunch", "Lunch", "Dinner"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,
@@ -174,7 +184,7 @@ class _SearchPageState extends State<SearchPage> {
                           _entertainmentValue = newValue;
                         });
                       },
-                      items: ["Happy hour", "Hookah", "Movies", "Mall"]
+                      items: ["", "Happy hour", "Hookah", "Movies", "Mall"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,
@@ -203,7 +213,7 @@ class _SearchPageState extends State<SearchPage> {
                           _recreationValue = newValue;
                         });
                       },
-                      items: ["Gym", "Park", "Biking", "Running"]
+                      items: ["", "Gym", "Park", "Biking", "Running"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,
@@ -218,7 +228,7 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(10)),
               color: Colors.orange,
               onPressed: () {
-                 Navigator.push(context, FadeRoute(page: HomePage()));
+                findDate();
               },
               child: Container(
                 height: 50,

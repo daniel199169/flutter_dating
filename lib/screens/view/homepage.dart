@@ -11,8 +11,12 @@ import 'package:nubae/screens/view/search.dart';
 import 'package:nubae/screens/view/settings.dart';
 import 'package:nubae/screens/view/login.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
+import 'package:nubae/models/ProfileImages.dart';
+import 'package:nubae/firebase_services/profile_manager.dart';
 
 class HomePage extends StatefulWidget {
+  final String uid;
+  HomePage({this.uid});
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -23,25 +27,36 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   CardController controller;
   List<String> welcomeImages = [];
- 
+  ProfileImages myimages;
 
   @override
   void initState() {
     // TODO: implement initState
 
     welcomeImages = [
-    "assets/images/welcome0.jpg",
-    "assets/images/welcome1.jpg",
-    "assets/images/placeholderProfileImage.jpg",
-    "assets/images/welcome3.jpg",
-    "assets/images/welcome4.jpg",
-    "assets/images/welcome0.jpg"
-  ];
+      "assets/images/welcome0.jpg",
+      "assets/images/welcome1.jpg",
+      "assets/images/placeholderProfileImage.jpg",
+      "assets/images/welcome3.jpg",
+      "assets/images/welcome4.jpg",
+      "assets/images/welcome0.jpg"
+    ];
     super.initState();
+    myimages = new ProfileImages(
+        myimageURL: '', myphoto1URL: '', myphoto2URL: '', myphoto3URL: '');
+    getImages();
+
     _pageController.addListener(() {
       setState(() {
         currentPageValue = _pageController.page;
       });
+    });
+  }
+
+  getImages() async {
+    ProfileImages _getImages = await ProfileManager.getImages(widget.uid);
+    setState(() {
+      myimages = _getImages;
     });
   }
 
@@ -78,15 +93,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
                 InkWell(
-                  onTap: () =>Navigator.push(context, FadeRoute(page: ProfilePage())),
+                  onTap: () => Navigator.push(
+                      context, FadeRoute(page: ProfilePage(uid: widget.uid))),
                   child: Column(
                     children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 50,
-                        child: Icon(Icons.person,
-                            size: 40, color: Colors.orangeAccent),
-                      ),
+                      myimages.myimageURL == ""
+                          ? CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 50,
+                              child: Icon(Icons.person,
+                                  size: 40, color: Colors.orangeAccent),
+                            )
+                          : CircleAvatar(
+                              radius: 40,
+                              backgroundImage:
+                                  NetworkImage(myimages.myimageURL),
+                            ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -124,7 +146,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 InkWell(
                   // onTap: () => Navigator.of(context).push(
                   //     CupertinoPageRoute(builder: (context) => ChatPage())),
-                      onTap: () =>Navigator.push(context, FadeRoute(page: ChatPage())),
+                  onTap: () =>
+                      Navigator.push(context, FadeRoute(page: ChatPage())),
                   child: Container(
                     child: Column(
                       children: [
@@ -147,7 +170,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   color: Colors.white,
                 ),
                 InkWell(
-                  onTap: () =>Navigator.push(context, FadeRoute(page: SearchPage())),
+                  onTap: () =>
+                      Navigator.push(context, FadeRoute(page: SearchPage())),
                   // onTap: () => Navigator.of(context).push(
                   //     CupertinoPageRoute(builder: (context) => SearchPage())),
                   child: Column(

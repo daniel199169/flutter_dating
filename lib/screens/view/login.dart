@@ -11,6 +11,9 @@ import 'package:nubae/screens/view/search.dart';
 
 
 class LoginPage extends StatefulWidget {
+  final String uid;
+  LoginPage({this.uid});
+
   @override
   State<StatefulWidget> createState() => _LoginPageState();
 }
@@ -48,12 +51,13 @@ class _LoginPageState extends State<LoginPage> {
       print(_emailController.text);
       print(_passwordController.text);
       var response =
-          await logUserIn(_emailController.text, _passwordController.text);
+          await DateAuth().signIn(_emailController.text, _passwordController.text);
+          
       print(response);
-      if (response is bool) {
+      if (response == null ) {
         Fluttertoast.showToast(msg: "Couldn't sign you in");
       } else {
-         Navigator.push(context, FadeRoute(page: SearchPage()));
+         Navigator.push(context, FadeRoute(page: SearchPage(uid: response)));
         
       }
     }

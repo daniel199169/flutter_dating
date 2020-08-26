@@ -4,8 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 import 'dart:io';
+import 'package:nubae/models/ProfileImages.dart';
+import 'package:nubae/firebase_services/profile_manager.dart';
 
 class ProfilePage extends StatefulWidget {
+  final String uid;
+  ProfilePage({this.uid});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -15,12 +20,58 @@ class _ProfilePageState extends State<ProfilePage> {
   String _entertainmentValue = "";
   String _recreationValue = "";
   File _image;
-  String myimageURL;
-  String myphoto1URL;
-  String myphoto2URL;
-  String myphoto3URL;
 
-  Future updateImage() async {
+  ProfileImages myimages;
+  String userName = "";
+  String city = "";
+
+  @override
+  void initState() {
+    super.initState();
+    myimages = new ProfileImages(
+        myimageURL: '', myphoto1URL: '', myphoto2URL: '', myphoto3URL: '');
+    getImages();
+    getHobby();
+    getName();
+    getLocation();
+  }
+
+  getImages() async {
+    ProfileImages _getImages = await ProfileManager.getImages(widget.uid);
+    setState(() {
+      myimages = _getImages;
+    });
+  }
+
+  getName() async {
+    String _getName = await ProfileManager.getUserName(widget.uid);
+    setState(() {
+      userName = _getName;
+    });
+  }
+
+  getLocation() async {
+    String _city = await ProfileManager.getLocation(widget.uid);
+    setState(() {
+      city = _city;
+    });
+  }
+
+  getHobby() async {
+    String cuisineValue = await ProfileManager.getHobbyCuisine(widget.uid);
+    String entertainmentValue =
+        await ProfileManager.getHobbyEntertainment(widget.uid);
+    String recreationValue =
+        await ProfileManager.getHobbyRecreation(widget.uid);
+
+    setState(() {
+      _cuisineValue = cuisineValue;
+      _entertainmentValue = entertainmentValue;
+      _recreationValue = recreationValue;
+    });
+  }
+
+  Future updateImage(imageType) async {
     await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
       setState(() {
         _image = image;
@@ -41,12 +92,22 @@ class _ProfilePageState extends State<ProfilePage> {
       // BuildderManager.updateCoverImage(
       //     coverImage, SessionManager.getUserId(), widget.id, widget.type);
       setState(() {
-        myimageURL = fileURL;
+        if (imageType == "myimageURL") {
+          myimages.myimageURL = fileURL;
+        } else if (imageType == "myphoto1URL") {
+          myimages.myphoto1URL = fileURL;
+        } else if (imageType == "myphoto2URL") {
+          myimages.myphoto2URL = fileURL;
+        } else {
+          myimages.myphoto3URL = fileURL;
+        }
+
+        _saveProfileBuilder();
       });
     });
   }
 
-  Future selectImage() async {
+  Future selectImage(imageType) async {
     await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
       setState(() {
         _image = image;
@@ -60,22 +121,44 @@ class _ProfilePageState extends State<ProfilePage> {
     await uploadTask.onComplete;
     storageReference.getDownloadURL().then((fileURL) {
       setState(() {
-        myimageURL = fileURL;
+        if (imageType == "myimageURL") {
+          myimages.myimageURL = fileURL;
+        } else if (imageType == "myphoto1URL") {
+          myimages.myphoto1URL = fileURL;
+        } else if (imageType == "myphoto2URL") {
+          myimages.myphoto2URL = fileURL;
+        } else {
+          myimages.myphoto3URL = fileURL;
+        }
+
         _saveProfileBuilder();
       });
     });
   }
 
   _saveProfileBuilder() async {
-    // if (imageURL != null && imageURL != '') {
-    //   CoverImageModel coverImage = CoverImageModel(
-    //       imageURL: imageURL,
-    //       description: description,
-    //       tag: tag,
-    //       reference: reference);
-    //   BuildderManager.updateCoverImage(
-    //       coverImage, SessionManager.getUserId(), widget.id, widget.type);
-    // }
+    if (myimages.myimageURL != null && myimages.myimageURL != '') {
+      ProfileImages sendmyImages = ProfileImages(
+        myimageURL: myimages.myimageURL,
+        myphoto1URL: myimages.myphoto1URL,
+        myphoto2URL: myimages.myphoto2URL,
+        myphoto3URL: myimages.myphoto3URL,
+      );
+      await ProfileManager.updateImages(sendmyImages, widget.uid);
+    }
+  }
+
+  _saveHobby(String hobbytype) async {
+    String content = '';
+    if (hobbytype == 'Cuisine') {
+      content = _cuisineValue;
+    } else if (hobbytype == 'Entertainment') {
+      content = _entertainmentValue;
+    } else if (hobbytype == 'Recreation') {
+      content = _recreationValue;
+    }
+
+    await ProfileManager.updateHobby(hobbytype, content, widget.uid);
   }
 
   @override
@@ -156,23 +239,28 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               Container(
-                  width: width,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 20, top: 20),
-                      child: Text("My Profile",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)))),
+                width: width,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20),
+                  child: Text(
+                    "My Profile",
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
               SizedBox(height: 50),
-              myimageURL == null || myimageURL == ""
+              myimages.myimageURL == null || myimages.myimageURL == ""
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CircleAvatar(
                         radius: 40,
+                        backgroundColor: Colors.grey,
                         child: MaterialButton(
                           onPressed: () {
-                            selectImage();
+                            selectImage("myimageURL");
                           },
                           child: Padding(
                             padding: EdgeInsets.only(top: 10.0),
@@ -180,9 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 IconTheme(
-                                  data: new IconThemeData(
-                                    color: Color(0xFF868E9C),
-                                  ),
+                                  data: new IconThemeData(color: Colors.black),
                                   child: new Icon(Icons.camera_enhance),
                                 ),
                                 Text(
@@ -191,7 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontFamily: 'Roboto Medium',
-                                    color: Color(0xFF868E9C),
+                                    color: Colors.black,
                                   ),
                                 )
                               ],
@@ -200,25 +286,39 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                          radius: 40, backgroundImage: AssetImage(myimageURL)),
+                  : new GestureDetector(
+                      onLongPress: () {
+                        updateImage("myimageURL");
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundImage: NetworkImage(myimages.myimageURL),
+                        ),
+                      ),
                     ),
               Text(
-                "Amy Whitefield",
+                userName,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 25),
               ),
-              Text("Guildhall School of Music and Drama",
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
-              Text("London, UK",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold)),
+              Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Text(
+                    city,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.15,
               ),
@@ -226,48 +326,216 @@ class _ProfilePageState extends State<ProfilePage> {
                   // color: Colors.white,
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: width * 0.45 + 10,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    padding: EdgeInsets.only(
-                        left: 10.0, right: 10.0, top: 10, bottom: 10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        'assets/images/welcome0.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  myimages.myphoto1URL == null || myimages.myphoto1URL == ""
+                      ? Stack(children: <Widget>[
+                          Container(
+                            width: width * 0.45 + 10,
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            padding: EdgeInsets.only(
+                                left: 10.0, right: 10.0, top: 10, bottom: 10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.asset('assets/images/loader.gif',
+                                  fit: BoxFit.cover),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: width * 0.11, top: height * 0.16),
+                            child: MaterialButton(
+                              onPressed: () {
+                                selectImage("myphoto1URL");
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    IconTheme(
+                                      data: new IconThemeData(
+                                          color: Colors.white),
+                                      child: new Icon(Icons.camera_enhance),
+                                    ),
+                                    Text(
+                                      'Add Image',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Roboto Medium',
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ])
+                      : new GestureDetector(
+                          onLongPress: () {
+                            updateImage("myphoto1URL");
+                          },
+                          child: Container(
+                            width: width * 0.45 + 10,
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            padding: EdgeInsets.only(
+                                left: 10.0, right: 10.0, top: 10, bottom: 10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.network(
+                                myimages.myphoto1URL,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
                   Column(
                     children: <Widget>[
-                      Container(
-                        width: width * 0.45,
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        padding: EdgeInsets.only(
-                            left: 0.0, right: 10.0, top: 10, bottom: 10),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Image.asset(
-                            'assets/images/welcome1.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: width * 0.45,
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        padding: EdgeInsets.only(
-                            left: 0.0, right: 10.0, top: 0, bottom: 10),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Image.asset(
-                            'assets/images/welcome3.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      myimages.myphoto2URL == null || myimages.myphoto2URL == ""
+                          ? Stack(children: <Widget>[
+                              Container(
+                                width: width * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                padding: EdgeInsets.only(
+                                    left: 0.0,
+                                    right: 10.0,
+                                    top: 10,
+                                    bottom: 10),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image.asset('assets/images/loader.gif',
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: width * 0.08, top: height * 0.07),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    selectImage("myphoto2URL");
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        IconTheme(
+                                          data: new IconThemeData(
+                                              color: Colors.white),
+                                          child: new Icon(Icons.camera_enhance),
+                                        ),
+                                        Text(
+                                          'Add Image',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'Roboto Medium',
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ])
+                          : new GestureDetector(
+                              onLongPress: () {
+                                updateImage("myphoto2URL");
+                              },
+                              child: Container(
+                                width: width * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                padding: EdgeInsets.only(
+                                    left: 0.0,
+                                    right: 10.0,
+                                    top: 10,
+                                    bottom: 10),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image.network(
+                                    myimages.myphoto2URL,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      myimages.myphoto3URL == null || myimages.myphoto3URL == ""
+                          ? Stack(children: <Widget>[
+                              Container(
+                                width: width * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                padding: EdgeInsets.only(
+                                    left: 0.0, right: 10.0, top: 0, bottom: 10),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image.asset('assets/images/loader.gif',
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: width * 0.08, top: height * 0.06),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    selectImage("myphoto3URL");
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        IconTheme(
+                                          data: new IconThemeData(
+                                              color: Colors.white),
+                                          child: new Icon(Icons.camera_enhance),
+                                        ),
+                                        Text(
+                                          'Add Image',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'Roboto Medium',
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ])
+                          : new GestureDetector(
+                              onLongPress: () {
+                                updateImage("myphoto3URL");
+                              },
+                              child: Container(
+                                width: width * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                padding: EdgeInsets.only(
+                                    left: 0.0, right: 10.0, top: 0, bottom: 10),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image.network(
+                                    myimages.myphoto3URL,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
                     ],
                   )
                 ],
@@ -293,6 +561,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onChanged: (String newValue) {
                           setState(() {
                             _cuisineValue = newValue;
+                            _saveHobby("Cuisine");
                           });
                         },
                         items: ["", "Brunch", "Lunch", "Dinner"]
@@ -323,6 +592,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onChanged: (String newValue) {
                           setState(() {
                             _entertainmentValue = newValue;
+                            _saveHobby("Entertainment");
                           });
                         },
                         items: ["", "Happy hour", "Hookah", "Movies", "Mall"]
@@ -353,6 +623,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onChanged: (String newValue) {
                           setState(() {
                             _recreationValue = newValue;
+                            _saveHobby("Recreation");
                           });
                         },
                         items: ["", "Gym", "Park", "Biking", "Running"]

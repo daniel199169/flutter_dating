@@ -1,84 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
+import 'package:nubae/firebase_services/user_manager.dart';
+import 'package:nubae/models/ExploreProfile.dart';
+import 'package:nubae/screens/view/explore_profile.dart';
 
-class ExplorePage extends StatefulWidget{
+class ExplorePage extends StatefulWidget {
+  final String uid;
+  ExplorePage({this.uid});
   @override
   _ExplorePageState createState() => _ExplorePageState();
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-
-  List _data = [
-    {
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },{
-    "name": "Amy Whitefield",
-
-  },
-  ];
-
+  List<ExploreProfile> data = [];
+  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    getData();
   }
 
-
-
+  getData() async {
+    var _data = await UserManager.getData();
+    setState(() {
+      data = _data;
+      print("********  --------   ********");
+      print(_data);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,208 +39,52 @@ class _ExplorePageState extends State<ExplorePage> {
     final orientation = MediaQuery.of(context).orientation;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: ()=> Navigator.of(context).pop(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          centerTitle: true,
+          title: Text("Explore Page"),
         ),
-        centerTitle: true,
-        title: Text("Explore Page"),
-      ),
-      backgroundColor: Colors.black,
+        backgroundColor: Colors.black,
         body: Container(
           width: width,
-          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           height: height,
-          child:  GridView.builder(
-            itemCount: _data.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3),
+          child: GridView.builder(
+            itemCount: data.length,
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
             itemBuilder: (BuildContext context, int index) {
               return new Card(
                 child: InkWell(
-                  onTap: ()=> Navigator.of(context).push(CupertinoPageRoute(builder: (context)=> ExploreProfilePage(_data[index]))),
+                  onTap: () => Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => ExploreProfilePage(data[index]))),
                   child: new GridTile(
-                    
                     header: Container(
                         width: width,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.black,Colors.black.withOpacity(0.3),Colors.transparent]
-                          )
-                        ),
-                        child: new Text(_data[index]['name'],style: TextStyle(color: Colors.white,fontSize: 15),)),
-                    child: Image.asset("assets/images/placeholderProfileImage.jpg",fit: BoxFit.cover,), //just for testing, will fill with image later
+                            gradient: LinearGradient(colors: [
+                          Colors.black,
+                          Colors.black.withOpacity(0.3),
+                          Colors.transparent
+                        ])),
+                        child: new Text(
+                          data[index].userName,
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        )),
+                    child: Image.network(
+                      data[index].myimage.myimageURL,
+                      fit: BoxFit.cover,
+                    ), //just for testing, will fill with image later
                   ),
                 ),
               );
             },
           ),
         ));
-  }
-}
-
-class ExploreProfilePage extends StatefulWidget {
-
-  final userDetails;
-  ExploreProfilePage(this.userDetails);
-
-  @override
-  _ExploreProfilePageState createState() => _ExploreProfilePageState();
-}
-
-class _ExploreProfilePageState extends State<ExploreProfilePage> {
-  @override
-  Widget build(BuildContext context) {
-
-    final width = getWidth(context);
-    final height = getHeight(context);
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Container(
-          width: width,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                "assets/images/placeholderProfileImage.jpg"
-              ),
-              alignment: Alignment.topCenter,
-
-            )
-          ),
-          height: height,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  width: width,
-                  height: height * 0.08,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                          width: width * 0.3,
-                          alignment: Alignment.centerLeft,
-                          child: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,),onPressed: ()=> Navigator.of(context).pop(),)),
-                      Container(
-                          width: width * 0.3,
-                          alignment: Alignment.center,
-                          child: FittedBox(
-                              fit: BoxFit.fitWidth,child: Text("Explore Page",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),))),
-                      SizedBox(width: width * 0.3,)
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(15),
-                    alignment: Alignment.bottomLeft,
-                    height: height * 0.25,
-                  child: Text("${widget.userDetails["name"]}",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  width: width,
-                  padding: EdgeInsets.symmetric(vertical: 8,horizontal: 15),
-                  color: Colors.black,
-                  height: height * 0.7,
-                  child: Column(
-                    children: [
-                      TextField(
-                        decoration: InputDecoration(
-
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-
-
-                          labelText: "Age",
-                          labelStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
-
-                        ),
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-
-
-                          labelText: "Race",
-                          labelStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
-
-                        ),
-                      ),
-
-                      TextField(
-                        decoration: InputDecoration(
-
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)
-                          ),
-
-
-                          labelText: "Address",
-                          labelStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
-
-                        ),
-                      ),
-                      SizedBox(
-                        height: height * 0.01,
-                      ),
-                      RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)
-                        ),
-                        color: Colors.orange,
-                        onPressed: (){
-
-                        },
-                        child: Container(
-                          height: 50,
-                          alignment: Alignment.center,
-                          width: width,child: Text("Date Request",style: TextStyle(fontSize: 15,color: Colors.white),),),
-                      )
-
-                    ],
-                  ),
-
-                )
-              ],
-            ),
-          ),
-
-        ),
-      ),
-    );
   }
 }
 

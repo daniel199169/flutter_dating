@@ -9,6 +9,7 @@ import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nubae/utils/static_data_service.dart';
+import 'package:nubae/firebase_services/authentication.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   LatLng _pubLatLang;
+
 //  _textControllers
 
   TextEditingController _userNameController = TextEditingController();
@@ -33,8 +35,9 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_emailController.text.isNotEmpty &&
         _passwordController.text.isNotEmpty &&
         _ageController.text.isNotEmpty &&
-        _raceController.text.isNotEmpty) {
-      var resonse = await signUp(
+        _raceController.text.isNotEmpty &&
+        _nubaeAddressLocationController.text.isNotEmpty) {
+      var resonse = await DateAuth().signUp(
           _emailController.text,
           _passwordController.text,
           _userNameController.text,
@@ -42,8 +45,13 @@ class _RegisterPageState extends State<RegisterPage> {
           _male,
           _raceController.text,
           _countryController.text,
-          _nubaeAddressLocationController.text);
-      if (resonse is bool)
+          _nubaeAddressLocationController.text,
+          _pubLatLang
+          );
+      
+      print("--------   ======   --------");
+      print(resonse);
+      if (resonse == null)
         return Fluttertoast.showToast(msg: "Couldn't sign you in");
 
       Navigator.push(context, FadeRoute(page: LoginPage()));
@@ -178,6 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: TextField(
                               style: TextStyle(color: Colors.white),
+                              controller: _countryController,
                               decoration: InputDecoration(
                                   icon: Icon(Icons.public, color: Colors.white),
                                   hintStyle: TextStyle(color: Colors.white),
@@ -196,6 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               child: IgnorePointer(
                                 child: TextField(
+                                  controller: _nubaeAddressLocationController,
                                   style: TextStyle(color: Colors.white),
                                   decoration: InputDecoration(
                                       icon: Icon(Icons.location_searching,

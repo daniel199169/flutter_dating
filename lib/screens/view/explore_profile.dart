@@ -104,21 +104,7 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
                           style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
-                      Container(height: 0.3, color: Colors.white),
-                      Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: Text(
-                          'Race',
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5, bottom: 15),
-                        child: Text(
-                          widget.userDetails.race,
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ),
+                      
                       Container(height: 0.3, color: Colors.white),
                       Padding(
                         padding: EdgeInsets.only(top: 15),

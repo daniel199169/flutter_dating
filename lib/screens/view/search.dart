@@ -18,16 +18,15 @@ enum Gender { male, female }
 class _SearchPageState extends State<SearchPage> {
   List<ExploreProfile> searchData = [];
   double _currentSliderValue = 20;
-  
+
   Gender _character = Gender.male;
   RangeValues _currentRangeValues = const RangeValues(0, 40);
 
-  String _cuisineValue = "Brunch";
-  String _entertainmentValue = "Happy hour";
-  String _recreationValue = "Gym";
+  String _cuisineValue = "";
+  String _entertainmentValue = "";
+  String _recreationValue = "";
   double myLatitude = 0.0;
   double myLongitude = 0.0;
-
 
   @override
   void initState() {
@@ -189,7 +188,7 @@ class _SearchPageState extends State<SearchPage> {
                           _cuisineValue = newValue;
                         });
                       },
-                      items: ["Brunch", "Lunch", "Dinner"]
+                      items: ["", "Brunch", "Lunch", "Dinner"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,
@@ -218,7 +217,7 @@ class _SearchPageState extends State<SearchPage> {
                           _entertainmentValue = newValue;
                         });
                       },
-                      items: ["Happy hour", "Hookah", "Movies", "Mall"]
+                      items: ["", "Happy hour", "Hookah", "Movies", "Mall"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,
@@ -247,7 +246,7 @@ class _SearchPageState extends State<SearchPage> {
                           _recreationValue = newValue;
                         });
                       },
-                      items: ["Gym", "Park", "Biking", "Running"]
+                      items: ["", "Gym", "Park", "Biking", "Running"]
                           .map((e) => DropdownMenuItem<String>(
                                 child: Text("$e"),
                                 value: e,

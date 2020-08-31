@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/firebase_services/user_manager.dart';
-import 'package:nubae/models/ExploreProfile.dart';
+import 'package:nubae/models/User.dart';
 import 'package:nubae/screens/view/explore_profile.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -13,7 +13,7 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  List<ExploreProfile> data = [];
+  List<User> data = [];
   
   @override
   void initState() {

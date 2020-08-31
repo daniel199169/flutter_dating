@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/firebase_services/user_manager.dart';
-import 'package:nubae/models/ExploreProfile.dart';
+import 'package:nubae/models/User.dart';
 
 class ExploreProfilePage extends StatefulWidget {
-  final ExploreProfile userDetails;
+  final User userDetails;
   ExploreProfilePage(this.userDetails);
 
   @override
@@ -109,7 +109,7 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
                       Padding(
                         padding: EdgeInsets.only(top: 15),
                         child: Text(
-                          'Address',
+                          'City / State',
                           style: TextStyle(fontSize: 14, color: Colors.white),
                         ),
                       ),

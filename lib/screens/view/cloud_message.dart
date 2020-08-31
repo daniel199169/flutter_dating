@@ -3,8 +3,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:nubae/screens/view/home.dart';
+import 'package:nubae/screens/view/homepage.dart';
 import 'package:nubae/utils/session_manager.dart';
+import 'package:nubae/screens/view/login.dart';
 
 class CloudMessage extends StatelessWidget {
   @override
@@ -132,6 +133,6 @@ class _MessageHandlerState extends State<MessageHandler> {
 
   @override
   Widget build(BuildContext context) {
-    return new Home();
+    return new LoginPage();
   }
 }

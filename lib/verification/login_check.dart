@@ -3,6 +3,7 @@ import 'package:nubae/firebase_services/authentication.dart';
 import 'package:nubae/screens/view/cloud_message.dart';
 import 'package:nubae/utils/session_manager.dart';
 import 'package:nubae/screens/view/login.dart';
+import 'package:nubae/screens/view/search.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,
@@ -26,6 +27,7 @@ class _LoginCheckState extends State<LoginCheck> {
   @override
   void initState() {
     super.initState();
+    // SessionManager.handleClearAllSettging();
     Auth().getCurrentUser().then((user) {
       setState(() {
         if (user != null) {
@@ -35,6 +37,8 @@ class _LoginCheckState extends State<LoginCheck> {
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
+    // print("--------- login status ---------");
+    // print(authStatus);
   }
 
   Widget buildWaitingScreen() {
@@ -60,11 +64,12 @@ class _LoginCheckState extends State<LoginCheck> {
         return buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return new LoginPage();
+        return new CloudMessage();
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return new CloudMessage();
+          print("------ already logined -------");
+          return new SearchPage();
         } else
           return buildWaitingScreen();
         break;

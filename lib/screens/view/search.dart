@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nubae/models/ExploreProfile.dart';
+import 'package:nubae/models/User.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:nubae/screens/view/homepage.dart';
@@ -16,7 +16,7 @@ class SearchPage extends StatefulWidget {
 enum Gender { male, female }
 
 class _SearchPageState extends State<SearchPage> {
-  List<ExploreProfile> searchData = [];
+  List<User> searchData = [];
   double _currentSliderValue = 20;
 
   Gender _character = Gender.male;

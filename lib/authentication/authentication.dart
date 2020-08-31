@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nubae/firebase_services/basic_firebase.dart';
 import 'package:nubae/models/ProfileImages.dart';
+import 'package:nubae/utils/session_manager.dart';
+import 'package:nubae/models/User.dart';
 
 abstract class BaseAuth {
   // Future<String> signIn(String email, String password);
@@ -31,6 +33,9 @@ class DateAuth implements BaseAuth {
       AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+
+      User userInfo = await getUserInfo(user.uid);
+      SessionManager.saveUserInfoToLocal(userInfo);
       print('--------><-------: Firebase User: ' + user.toString());
       return user.uid;
     } catch (er) {
@@ -53,7 +58,8 @@ class DateAuth implements BaseAuth {
         email: email, password: password);
     print(result);
     FirebaseUser user = result.user;
-    ProfileImages images = new ProfileImages(myimageURL: "", myphoto1URL: "", myphoto2URL: "", myphoto3URL: "");
+    ProfileImages images = new ProfileImages(
+        myimageURL: "", myphoto1URL: "", myphoto2URL: "", myphoto3URL: "");
     try {
       await Firestore.instance
           .collection("Users")
@@ -81,5 +87,34 @@ class DateAuth implements BaseAuth {
       print(e);
       return null;
     }
+  }
+
+  Future<User> getUserInfo(String uid) async {
+    QuerySnapshot docSnapShot = await db
+        .collection('Users')
+        .where('uid', isEqualTo: uid)
+        .getDocuments();
+    if (docSnapShot == null || docSnapShot.documents.length == 0) {
+      return null;
+    }
+    return User.fromJson(docSnapShot.documents[0].data);
+  }
+
+  Future<bool> setUserInfo(User user) async {
+    var userId = SessionManager.getUserId();
+
+    final TransactionHandler txHandler = (Transaction tx) async {
+      DocumentSnapshot ds = await tx.get(userCollection.document(userId));
+      await tx.set(ds.reference, user.toJson());
+
+      return {'updated': true};
+    };
+
+    return db.runTransaction(txHandler).then((res) {
+      return res['updated'] as bool;
+    }).catchError((error) {
+      print(error);
+      return false;
+    });
   }
 }

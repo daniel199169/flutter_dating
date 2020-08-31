@@ -1,76 +1,64 @@
-enum Gender { MALE, FEMALE }
-
-String genderToString(Gender gender) {
-  if (gender == Gender.FEMALE) return 'female';
-  return 'male';
-}
-
-Gender genderFromString(String genderStr) {
-  if (genderStr == 'female') return Gender.FEMALE;
-  return Gender.MALE;
-}
+import 'ProfileImages.dart';
 
 class User {
   String uid;
-  String tellusname;
-  String email;
-  String image;
-  Gender gender;
-  String birthday;
-  String description;
-  String fullname;
-  String website;
-  String otherlink;
-  String professional;
-  String permission;
-  // String pushToken;
+  String userName;
+  int age;
+  String race;
+  String city;
+  bool male;
+  String cuisine;
+  String entertainment;
+  String recreation;
+  double latitude;
+  double longitude;
+  ProfileImages myimage;
 
-  Map<String, dynamic> toJson() => {
-    'uid': uid,
-    'tellusname': tellusname,
-    'email': email,
-    'image': image,
-    'gender': genderToString(gender),
-    'birthday': birthday,
-    'description': description,
-    'fullname': fullname,
-    'website': website,
-    'otherlink': otherlink,
-    'professional': professional,
-    'permission': permission,
-    // 'pushToken': pushToken,
-  };
+  User({
+    this.uid,
+    this.userName,
+    this.age,
+    this.race,
+    this.city,
+    this.male,
+    this.cuisine,
+    this.entertainment,
+    this.recreation,
+    this.latitude,
+    this.longitude,
+    this.myimage,
+  });
 
-  User(
-      this.uid,
-      this.tellusname,
-      this.email,
-      this.image,
-      this.gender,
-      this.birthday,
-      this.description,
-      this.fullname,
-      this.website,
-      this.otherlink,
-      this.professional,
-      this.permission,
-      // this.pushToken
-      );
+  User.fromJson(Map<dynamic, dynamic> json) {
+    uid = json['uid'];
+    userName = json['userName'];
+    age = json['age'];
+    race = json['race'];
+    city = json['city'];
+    male = json['male'];
+    cuisine = json['Cuisine'];
+    entertainment = json['Entertainment'];
+    recreation = json['Recreation'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    myimage = ProfileImages.fromJson(json['images']);
+  }
 
-  User._internalFromJson(Map jsonMap)
-      : uid = jsonMap['uid']?.toString() ?? '',
-        tellusname = jsonMap['tellusname']?.toString() ?? '',
-        email = jsonMap['email']?.toString() ?? '',
-        image = jsonMap['image']?.toString() ?? '',
-        gender = genderFromString(jsonMap['gender']?.toString() ?? 'male'),
-        birthday = jsonMap['birthday']?.toString() ?? '',
-        description = jsonMap['description']?.toString() ?? '',
-        fullname = jsonMap['fullname']?.toString() ?? '',
-        website = jsonMap['website']?.toString() ?? '',
-        otherlink = jsonMap['otherlink']?.toString() ?? '',
-        professional = jsonMap['professional'].toString() ?? '',
-        permission = jsonMap['permission'].toString() ?? '';
-        // pushToken = jsonMap['pushToken'].toString() ?? '';
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
+    data['uid'] = this.uid;
+    data['userName'] = this.userName;
+    data['age'] = this.age;
+    data['race'] = this.race;
+    data['city'] = this.city;
+    data['male'] = this.male;
+    data['Cuisine'] = this.cuisine;
+    data['Entertainment'] = this.entertainment;
+    data['Recreation'] = this.recreation;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['myimage'] = this.myimage.toJson();
 
-  factory User.fromJson(Map jsonMap) => User._internalFromJson(jsonMap);
+    return data;
+  }
 }

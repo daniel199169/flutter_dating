@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nubae/models/ExploreProfile.dart';
+import 'package:nubae/models/User.dart';
 import 'basic_firebase.dart';
 import 'package:geolocator/geolocator.dart';
 
 enum Gender { male, female }
 
 class UserManager {
-  static Future<List<ExploreProfile>> getData(String uid) async {
+  static Future<List<User>> getData(String uid) async {
     QuerySnapshot querySnapshot = await db.collection("Users").getDocuments();
-    List<ExploreProfile> _list = [];
-    List<ExploreProfile> _result = [];
+    List<User> _list = [];
+    List<User> _result = [];
 
     _list = querySnapshot.documents.map((doc) {
-      return ExploreProfile.fromJson(doc.data);
+      return User.fromJson(doc.data);
     }).toList();
 
     for (int i = 0; i < _list.length; i++) {
@@ -23,7 +23,7 @@ class UserManager {
     return _result;
   }
 
-  static Future<List<ExploreProfile>> searchData(
+  static Future<List<User>> searchData(
       double distance,
       double minAge,
       double maxAge,
@@ -35,11 +35,11 @@ class UserManager {
       double mylongitude,
       String uid) async {
     QuerySnapshot querySnapshot = await db.collection("Users").getDocuments();
-    List<ExploreProfile> _list = [];
-    List<ExploreProfile> _result = [];
+    List<User> _list = [];
+    List<User> _result = [];
 
     _list = querySnapshot.documents.map((doc) {
-      return ExploreProfile.fromJson(doc.data);
+      return User.fromJson(doc.data);
     }).toList();
 
     for (int i = 0; i < _list.length; i++) {

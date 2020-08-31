@@ -57,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response == null ) {
         Fluttertoast.showToast(msg: "Couldn't sign you in");
       } else {
+        
          Navigator.push(context, FadeRoute(page: SearchPage(uid: response)));
         
       }

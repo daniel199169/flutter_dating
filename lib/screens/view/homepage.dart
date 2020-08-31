@@ -13,11 +13,14 @@ import 'package:nubae/screens/view/login.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:nubae/models/ProfileImages.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
-import 'package:nubae/models/ExploreProfile.dart';
+import 'package:nubae/models/User.dart';
+import 'package:nubae/firebase_services/likes_manager.dart';
+import 'package:nubae/utils/session_manager.dart';
+import 'package:nubae/verification/login_check.dart';
 
 class HomePage extends StatefulWidget {
   final String uid;
-  final List<ExploreProfile> searchData;
+  final List<User> searchData;
 
   HomePage({this.uid, this.searchData});
   @override
@@ -53,6 +56,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {
       myimages = _getImages;
     });
+  }
+
+  addLikes(String likedUid) async {
+    await LikesManager.addLikes(widget.uid, likedUid);
+  }
+
+  signOut() async {
+    try {
+      SessionManager.handleClearAllSettging();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => LoginCheck()),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -190,7 +209,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, FadeRoute(page: ExplorePage(uid: widget.uid)));
+                    Navigator.push(
+                        context, FadeRoute(page: ExplorePage(uid: widget.uid)));
                     // Navigator.of(context).push(CupertinoPageRoute(
                     //     builder: (context) => ExplorePage()));
                   },
@@ -263,7 +283,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 IconButton(
                     onPressed: () {
-                      Navigator.push(context, FadeRoute(page: LoginPage()));
+                      signOut();
                     },
                     icon: Icon(
                       Icons.exit_to_app,
@@ -330,15 +350,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     swipeUpdateCallback:
                         (DragUpdateDetails details, Alignment align) {
                       /// Get swiping card's alignment
-                      if (align.x < 0) {
-                        //Card is LEFT swiping
-                      } else if (align.x > 0) {
-                        //Card is RIGHT swiping
-                      }
+                      // if (align.x < 0) {
+                      //   print("Card is LEFT swiping");
+                      // } else if (align.x > 0) {
+                      //   print("Card is RIGHT swiping");
+                      // }
                     },
                     swipeCompleteCallback:
                         (CardSwipeOrientation orientation, int index) {
-                      /// Get orientation & index of swiped card!
+                      if (orientation.toString() ==
+                          "CardSwipeOrientation.RIGHT") {
+                        addLikes(widget.searchData[index].uid);
+                      }
                     },
                   ),
                 ),

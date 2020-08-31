@@ -48,8 +48,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     _logUserIn() async {
-      print(_emailController.text);
-      print(_passwordController.text);
+    
       var response =
           await DateAuth().signIn(_emailController.text, _passwordController.text);
           
@@ -58,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         Fluttertoast.showToast(msg: "Couldn't sign you in");
       } else {
         
-         Navigator.push(context, FadeRoute(page: SearchPage(uid: response)));
+         Navigator.push(context, FadeRoute(page: SearchPage()));
         
       }
     }

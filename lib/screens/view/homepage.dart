@@ -19,10 +19,10 @@ import 'package:nubae/utils/session_manager.dart';
 import 'package:nubae/verification/login_check.dart';
 
 class HomePage extends StatefulWidget {
-  final String uid;
+ 
   final List<User> searchData;
 
-  HomePage({this.uid, this.searchData});
+  HomePage({this.searchData});
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -52,14 +52,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   getImages() async {
-    ProfileImages _getImages = await ProfileManager.getImages(widget.uid);
+    ProfileImages _getImages = await ProfileManager.getImages(SessionManager.getUserId());
     setState(() {
       myimages = _getImages;
     });
   }
 
   addLikes(String likedUid) async {
-    await LikesManager.addLikes(widget.uid, likedUid);
+    await LikesManager.addLikes(SessionManager.getUserId(), likedUid);
   }
 
   signOut() async {
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 InkWell(
                   onTap: () => Navigator.push(
-                      context, FadeRoute(page: ProfilePage(uid: widget.uid))),
+                      context, FadeRoute(page: ProfilePage())),
                   child: Column(
                     children: [
                       myimages.myimageURL == ""
@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 InkWell(
                   onTap: () {
                     Navigator.push(
-                        context, FadeRoute(page: ExplorePage(uid: widget.uid)));
+                        context, FadeRoute(page: ExplorePage()));
                     // Navigator.of(context).push(CupertinoPageRoute(
                     //     builder: (context) => ExplorePage()));
                   },

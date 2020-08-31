@@ -4,17 +4,16 @@ import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/firebase_services/user_manager.dart';
 import 'package:nubae/models/User.dart';
 import 'package:nubae/screens/view/explore_profile.dart';
+import 'package:nubae/utils/session_manager.dart';
 
 class ExplorePage extends StatefulWidget {
-  final String uid;
-  ExplorePage({this.uid});
   @override
   _ExplorePageState createState() => _ExplorePageState();
 }
 
 class _ExplorePageState extends State<ExplorePage> {
   List<User> data = [];
-  
+
   @override
   void initState() {
     // TODO: implement initState
@@ -23,11 +22,9 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   getData() async {
-    var _data = await UserManager.getData(widget.uid);
+    var _data = await UserManager.getData(SessionManager.getUserId());
     setState(() {
       data = _data;
-      print("********  --------   ********");
-      print(_data);
     });
   }
 
@@ -87,4 +84,3 @@ class _ExplorePageState extends State<ExplorePage> {
         ));
   }
 }
-

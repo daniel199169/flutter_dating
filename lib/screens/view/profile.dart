@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nubae/utils/session_manager.dart';
 import 'package:path/path.dart' as Path;
 import 'dart:io';
 import 'package:nubae/models/ProfileImages.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String uid;
-  ProfilePage({this.uid});
+ 
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -37,32 +37,32 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   getImages() async {
-    ProfileImages _getImages = await ProfileManager.getImages(widget.uid);
+    ProfileImages _getImages = await ProfileManager.getImages(SessionManager.getUserId());
     setState(() {
       myimages = _getImages;
     });
   }
 
   getName() async {
-    String _getName = await ProfileManager.getUserName(widget.uid);
+    String _getName = await ProfileManager.getUserName(SessionManager.getUserId());
     setState(() {
       userName = _getName;
     });
   }
 
   getLocation() async {
-    String _city = await ProfileManager.getLocation(widget.uid);
+    String _city = await ProfileManager.getLocation(SessionManager.getUserId());
     setState(() {
       city = _city;
     });
   }
 
   getHobby() async {
-    String cuisineValue = await ProfileManager.getHobbyCuisine(widget.uid);
+    String cuisineValue = await ProfileManager.getHobbyCuisine(SessionManager.getUserId());
     String entertainmentValue =
-        await ProfileManager.getHobbyEntertainment(widget.uid);
+        await ProfileManager.getHobbyEntertainment(SessionManager.getUserId());
     String recreationValue =
-        await ProfileManager.getHobbyRecreation(widget.uid);
+        await ProfileManager.getHobbyRecreation(SessionManager.getUserId());
 
     setState(() {
       _cuisineValue = cuisineValue;
@@ -144,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
         myphoto2URL: myimages.myphoto2URL,
         myphoto3URL: myimages.myphoto3URL,
       );
-      await ProfileManager.updateImages(sendmyImages, widget.uid);
+      await ProfileManager.updateImages(sendmyImages, SessionManager.getUserId());
     }
   }
 
@@ -158,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
       content = _recreationValue;
     }
 
-    await ProfileManager.updateHobby(hobbytype, content, widget.uid);
+    await ProfileManager.updateHobby(hobbytype, content, SessionManager.getUserId());
   }
 
   @override

@@ -5,10 +5,9 @@ import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:nubae/screens/view/homepage.dart';
 import 'package:nubae/firebase_services/user_manager.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
+import 'package:nubae/utils/session_manager.dart';
 
 class SearchPage extends StatefulWidget {
-  final String uid;
-  SearchPage({this.uid});
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -36,8 +35,8 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   getCoordinate() async {
-    double _mylat = await ProfileManager.getLatitude(widget.uid);
-    double _mylon = await ProfileManager.getLongitude(widget.uid);
+    double _mylat = await ProfileManager.getLatitude(SessionManager.getUserId());
+    double _mylon = await ProfileManager.getLongitude(SessionManager.getUserId());
     setState(() {
       myLatitude = _mylat;
       myLongitude = _mylon;
@@ -63,10 +62,9 @@ class _SearchPageState extends State<SearchPage> {
         _recreationValue,
         myLatitude,
         myLongitude,
-        widget.uid);
+        SessionManager.getUserId());
 
-    Navigator.push(context,
-        FadeRoute(page: HomePage(uid: widget.uid, searchData: searchData)));
+    Navigator.push(context, FadeRoute(page: HomePage(searchData: searchData)));
   }
 
   @override

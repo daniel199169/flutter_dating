@@ -36,7 +36,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   creatNewChat(String chatID, String likedUid, String receiverImage, String receiverUserName) async {
 
-    ChatController.createNewChat(chatID, likedUid, "New match")
+    ChatController.createNewChat(chatID, likedUid, "New match", receiverImage, receiverUserName)
         .then((currentChatID) {
       Navigator.push(
         context,

@@ -4,6 +4,10 @@ import 'package:nubae/utils/session_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nubae/firebase_services/basic_firebase.dart';
 import 'package:nubae/firebase_services/likes_manager.dart';
+import 'package:nubae/custom_widgets/custom_yes_cancel_dialog.dart';
+import 'package:nubae/models/Like.dart';
+import 'package:nubae/firebase_services/chat_manager.dart';
+import 'package:nubae/screens/view/chat_screens/chatPage.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -11,24 +15,37 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List _notifications;
+  
+  List<Like> likeData = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    
+
     getLikesData();
-    _notifications = [
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-    ];
   }
 
-  getLikesData() async{
-     await LikesManager.getLikesData(SessionManager.getUserId());
+  getLikesData() async {
+    List<Like> _likeData =
+        await LikesManager.getLikesData(SessionManager.getUserId());
+    setState(() {
+      likeData = _likeData;
+    });
+  }
+
+  creatNewChat(String chatID, String likedUid, String receiverImage, String receiverUserName) async {
+
+    ChatController.createNewChat(chatID, likedUid, "New match")
+        .then((currentChatID) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) =>
+                ChatPage(chatID: currentChatID, receiverID: likedUid, receiverName: receiverUserName, receiverImage: receiverImage,)),
+      );
+    });
+    // await LikeController.deleteLike(widget.like.id);
   }
 
   @override
@@ -56,25 +73,55 @@ class _NotificationPageState extends State<NotificationPage> {
                 width: width,
                 height: height,
                 child: ListView.builder(
-                  itemBuilder: (context, ind) => ListTile(
+                  itemBuilder: (context, index) => ListTile(
                     leading: CircleAvatar(
-                      child: Icon(Icons.person),
-                      backgroundColor: Colors.white,
+                      backgroundImage:
+                          NetworkImage(likeData[index].imageformyuid),
+                      radius: 25,
                     ),
-                    title: Text(
-                      "${_notifications[ind]["message"]}",
-                      style: TextStyle(color: Colors.white),
+                    title: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: likeData[index].userNameFormyuid,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: " want to go on a date with you",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ]),
                     ),
                     trailing: RaisedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        ConfirmAction _selAction = await CustomYesCancelDialog(
+                            context,
+                            title: 'is it a date?',
+                            content: '');
+                        if (_selAction == ConfirmAction.YES) {
+                          String chatID =
+                              db.collection("Likes").document().documentID;
+                          creatNewChat(chatID, likeData[index].myuid, likeData[index].imageformyuid, likeData[index].userNameFormyuid);
+                        }
+                        if (_selAction == ConfirmAction.NO) {
+                          return;
+                        }
+                      },
                       color: Colors.orange,
                       child: Text(
-                        "${_notifications[ind]["action"]}".toUpperCase(),
+                        "ACCEPT",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  itemCount: _notifications.length,
+                  itemCount: likeData.length,
                 ));
           },
         ));

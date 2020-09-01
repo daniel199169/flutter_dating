@@ -17,6 +17,7 @@ import 'package:nubae/models/User.dart';
 import 'package:nubae/firebase_services/likes_manager.dart';
 import 'package:nubae/utils/session_manager.dart';
 import 'package:nubae/verification/login_check.dart';
+import 'package:nubae/screens/view/chat_screens/chatsPage.dart';
 
 class HomePage extends StatefulWidget {
  
@@ -161,7 +162,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   // onTap: () => Navigator.of(context).push(
                   //     CupertinoPageRoute(builder: (context) => ChatPage())),
                   onTap: () =>
-                      Navigator.push(context, FadeRoute(page: ChatPage())),
+                      // Navigator.push(context, FadeRoute(page: ChatPage())),
+                      Navigator.push(context, FadeRoute(page: ChatsPage())),
                   child: Container(
                     child: Column(
                       children: [

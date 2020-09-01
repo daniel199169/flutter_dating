@@ -11,6 +11,7 @@ class SessionManager {
   static final String KEY_EMAIL = 'key_email';
   static final String KEY_IMAGE = 'key_image';
   static final String KEY_USER_ID = 'key_user_id';
+  static final String KEY_USER_NAME = 'key_user_name';
 
   static SharedPreferences _sharedPrefs;
 
@@ -71,6 +72,10 @@ class SessionManager {
 
   static String getImage() {
     return _sharedPrefs.getString(KEY_IMAGE) ?? '';
+  }
+
+   static String getUserName() {
+    return _sharedPrefs.getString(KEY_USER_NAME) ?? '';
   }
 
   static void setImage(String image) {

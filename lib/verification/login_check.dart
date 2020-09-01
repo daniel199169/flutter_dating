@@ -68,7 +68,6 @@ class _LoginCheckState extends State<LoginCheck> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          print("------ already logined -------");
           return new SearchPage();
         } else
           return buildWaitingScreen();

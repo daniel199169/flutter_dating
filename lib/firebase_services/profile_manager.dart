@@ -44,6 +44,21 @@ class ProfileManager {
     }
   }
 
+  static Future<String> getProfileImage(String uid) async {
+    QuerySnapshot querySnapshot = await db
+        .collection("Users")
+        .where('uid', isEqualTo: uid)
+        .getDocuments();
+
+    if (querySnapshot.documents[0]['images'] == null) {
+      return "";
+    } else {
+      ProfileImages _result =
+          ProfileImages.fromJson(querySnapshot.documents[0]['images']);
+      return _result.myimageURL;
+    }
+  }
+
   static Future<String> getUserName(String uid) async {
     QuerySnapshot querySnapshot = await db
         .collection("Users")
@@ -70,7 +85,7 @@ class ProfileManager {
     }
   }
 
-   static getLatitude(String uid) async {
+  static getLatitude(String uid) async {
     QuerySnapshot querySnapshot = await db
         .collection("Users")
         .where('uid', isEqualTo: uid)
@@ -83,7 +98,7 @@ class ProfileManager {
     }
   }
 
-   static getLongitude(String uid) async {
+  static getLongitude(String uid) async {
     QuerySnapshot querySnapshot = await db
         .collection("Users")
         .where('uid', isEqualTo: uid)
@@ -108,7 +123,6 @@ class ProfileManager {
       return querySnapshot.documents[0]['Cuisine'];
     }
   }
-
 
   static Future<String> getHobbyEntertainment(String uid) async {
     QuerySnapshot querySnapshot = await db

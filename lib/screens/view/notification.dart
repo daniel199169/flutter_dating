@@ -15,7 +15,6 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  
   List<Like> likeData = [];
 
   @override
@@ -34,18 +33,27 @@ class _NotificationPageState extends State<NotificationPage> {
     });
   }
 
-  creatNewChat(String chatID, String likedUid, String receiverImage, String receiverUserName) async {
+  creatNewChat(String chatID, String likedUid, String receiverImage,
+      String receiverUserName) async {
+    ChatController.createNewChat(
+            chatID, likedUid, "New match", receiverImage, receiverUserName)
+        .then((currentChatID) async{
 
-    ChatController.createNewChat(chatID, likedUid, "New match", receiverImage, receiverUserName)
-        .then((currentChatID) {
+      print("==========    8888888888     =========");
+      await LikesManager.deleteLike(SessionManager.getUserId(), likedUid);
+      getLikesData();
+
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) =>
-                ChatPage(chatID: currentChatID, receiverID: likedUid, receiverName: receiverUserName, receiverImage: receiverImage,)),
+            builder: (_) => ChatPage(
+                  chatID: currentChatID,
+                  receiverID: likedUid,
+                  receiverName: receiverUserName,
+                  receiverImage: receiverImage,
+                )),
       );
     });
-    // await LikeController.deleteLike(widget.like.id);
   }
 
   @override
@@ -108,7 +116,11 @@ class _NotificationPageState extends State<NotificationPage> {
                         if (_selAction == ConfirmAction.YES) {
                           String chatID =
                               db.collection("Likes").document().documentID;
-                          creatNewChat(chatID, likeData[index].myuid, likeData[index].imageformyuid, likeData[index].userNameFormyuid);
+                          creatNewChat(
+                              chatID,
+                              likeData[index].myuid,
+                              likeData[index].imageformyuid,
+                              likeData[index].userNameFormyuid);
                         }
                         if (_selAction == ConfirmAction.NO) {
                           return;

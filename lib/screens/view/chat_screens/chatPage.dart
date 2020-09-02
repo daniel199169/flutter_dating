@@ -9,9 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/firebase_services/authentication.dart';
 import 'package:nubae/utils/session_manager.dart';
-// import 'package:nubae/models/profile.dart';
-// import 'package:nubae/models/event.dart';
-// import 'package:nubae/View/custom/profilePhotoWidget.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:nubae/screens/view/chat_screens/chatsPage.dart';
+import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatPage extends StatefulWidget {
@@ -106,6 +106,18 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        centerTitle: true,
+        title: Text("Chats"),
+        bottom: MyDivider(
+          color: Colors.white,
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: db
             .collection("Chats")
@@ -126,48 +138,14 @@ class _ChatPageState extends State<ChatPage> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top: 50, left: 8, right: 8),
+            margin: EdgeInsets.only(top: 0, left: 0, right: 0),
             child: Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        GestureDetector(
-                            onTap: () {
-                              readMessage();
-                              // Navigator.push(
-                              //   context,
-                              //   SlideLeftRoute(page: TabsPage(index: 2)),
-                              // );
-                            },
-                            child: Icon(
-                              Icons.keyboard_arrow_left,
-                            )),
-                        Padding(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text(widget.receiverName,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ))),
-                      ],
-                    ),
-                  ],
-                ),
                 Expanded(
                   child: DefaultTabController(
                     length: 2,
                     child: Column(
                       children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(color: Colors.transparent),
-                          child: Text(
-                            "Chat",
-                            style: TextStyle(color: Colors.white, fontSize: 24),
-                          ),
-                        ),
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.only(top: 20),
@@ -201,7 +179,8 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 SizedBox(height: 5),
                 Container(
-                  height: 50,
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  height: 70,
                   child: Form(
                     key: _formKey,
                     child: Row(
@@ -233,14 +212,14 @@ class _ChatPageState extends State<ChatPage> {
                             decoration: InputDecoration(
                               hintText: "Send a message",
                               hintStyle: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
                               ),
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               border: InputBorder.none,
-                              fillColor: Colors.white,
+                              fillColor: Colors.orange,
                               filled: true,
                             ),
                           ),
@@ -262,14 +241,14 @@ class _ChatPageState extends State<ChatPage> {
                             child: Text(
                               "Send",
                               style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ))
                       ],
                     ),
                   ),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.orange,
                       border: Border(
                           top: BorderSide(width: 0.5, color: Colors.grey))),
                 ),
@@ -286,6 +265,7 @@ class _ChatPageState extends State<ChatPage> {
       controller: messagesController,
       itemCount: chat.messages.length,
       itemBuilder: (BuildContext context, int index) {
+        // if (index > 0) {
         return Padding(
           padding: EdgeInsets.only(top: 15),
           child: Column(
@@ -416,7 +396,28 @@ class _ChatPageState extends State<ChatPage> {
             ],
           ),
         );
+        // }
       },
     );
   }
+}
+
+class MyDivider extends Divider implements PreferredSizeWidget {
+  MyDivider({
+    Key key,
+    height = 16.0,
+    indent = 0.0,
+    color,
+  })  : assert(height >= 0.0),
+        super(
+          key: key,
+          height: height,
+          indent: indent,
+          color: color,
+        ) {
+    preferredSize = Size(double.infinity, height);
+  }
+
+  @override
+  Size preferredSize;
 }

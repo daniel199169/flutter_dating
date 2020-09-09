@@ -33,13 +33,13 @@ class _NotificationPageState extends State<NotificationPage> {
     });
   }
 
-  creatNewChat(String chatID, String likedUid, String receiverImage,
+  createNewChat(String chatID, String likedUid, String receiverImage,
       String receiverUserName) async {
     ChatController.createNewChat(
-            chatID, likedUid, "New match", receiverImage, receiverUserName)
+            chatID, likedUid, "Hello", receiverImage, receiverUserName)
         .then((currentChatID) async{
 
-      print("==========    8888888888     =========");
+      
       await LikesManager.deleteLike(SessionManager.getUserId(), likedUid);
       getLikesData();
 
@@ -116,7 +116,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         if (_selAction == ConfirmAction.YES) {
                           String chatID =
                               db.collection("Likes").document().documentID;
-                          creatNewChat(
+                          createNewChat(
                               chatID,
                               likeData[index].myuid,
                               likeData[index].imageformyuid,

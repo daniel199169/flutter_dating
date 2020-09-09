@@ -148,6 +148,7 @@ class _ChatPageState extends State<ChatPage> {
                       children: <Widget>[
                         Expanded(
                           child: Container(
+                            padding: EdgeInsets.only(left: 15, right: 15),
                             margin: EdgeInsets.only(top: 20),
                             child: chat.messages.length > 0
                                 ? chatPage(chat)
@@ -300,6 +301,9 @@ class _ChatPageState extends State<ChatPage> {
                                 style: TextStyle(color: Colors.white),
                               )),
                             ),
+                  SizedBox(
+                    width: 5,
+                  ),
                   chat.messages[index].type == "text"
                       ? Container(
                           padding: EdgeInsets.all(10),

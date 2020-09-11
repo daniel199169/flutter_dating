@@ -44,7 +44,7 @@ dependencies:
   flutter_tindercard: ^0.2.0
   material_design_icons_flutter: ^4.0.5345
   google_map_location_picker: ^3.3.3
-  google_maps_flutter: ^0.5.28+1
+  google_maps_flutter: ^0.5.30
   geolocator: ^5.3.2+2
   font_awesome_flutter: ^8.8.1
   path_provider: ^1.6.11

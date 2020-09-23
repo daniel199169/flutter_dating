@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
-
+import 'package:nubae/screens/view/subscribe/paypal_payment.dart';
 class SubscriptionPage extends StatefulWidget {
   @override
   _SubscriptionPageState createState() => _SubscriptionPageState();
@@ -13,6 +13,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       "name": "1",
     },
   ];
+  int number = 1;
 
   @override
   void initState() {
@@ -75,7 +76,19 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                           RaisedButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      PaypalPayment(
+                                    onFinish: (number) async {
+                                      // payment done
+                                      print('order id: ' + number);
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
                             color: Colors.orange,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -95,68 +108,3 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   }
 }
 
-class ViewOffer extends StatefulWidget {
-  final details;
-  ViewOffer(this.details);
-
-  @override
-  _ViewOfferState createState() => _ViewOfferState();
-}
-
-class _ViewOfferState extends State<ViewOffer> {
-  List _notifications;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _notifications = [
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-      {"message": "Sandy want to go on a date with you", "action": "accept"},
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final width = getWidth(context);
-    final height = getHeight(context);
-
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          centerTitle: true,
-          title: Text("View Offer"),
-        ),
-        body: Container(
-            width: width,
-            height: height,
-            child: ListView.builder(
-              itemBuilder: (context, ind) => ListTile(
-                leading: CircleAvatar(
-                  child: Icon(Icons.person),
-                  backgroundColor: Colors.white,
-                ),
-                title: Text(
-                  "${_notifications[ind]["message"]}",
-                  style: TextStyle(color: Colors.white),
-                ),
-                trailing: RaisedButton(
-                  onPressed: () {},
-                  color: Colors.orange,
-                  child: Text(
-                    "${_notifications[ind]["action"]}".toUpperCase(),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              itemCount: _notifications.length,
-            )));
-  }
-}

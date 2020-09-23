@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -50,7 +50,9 @@ dependencies:
   path_provider: ^1.6.11
   timeago: ^2.0.26
   badges: ^1.1.1
-  
+  http_auth: ^0.3.0
+  webview_flutter: ^0.3.23
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

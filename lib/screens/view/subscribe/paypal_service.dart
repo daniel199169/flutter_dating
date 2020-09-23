@@ -4,24 +4,31 @@ import 'dart:convert' as convert;
 import 'package:http_auth/http_auth.dart';
 
 class PaypalServices {
-
   String domain = "https://api.sandbox.paypal.com"; // for sandbox mode
 //  String domain = "https://api.paypal.com"; // for production mode
 
   // change clientId and secret with your own, provided by paypal
-  String clientId = 'AQoD5QCKsSuTKH7pFPt3OLJx7lRcV4WShGLgzJ4KRg_HuwFwJ49OmHxTbNpCp-W2UcM2jNLHNJirmuRH';
-  String secret = 'ENPMynhdDglOOBis0QlkllyUZqmFstJgWwoJ45xJaec3D-QjGln5-8XMxZPz9-rVHGxorp9b53foIIm3';
+  String clientId =
+      'AQoD5QCKsSuTKH7pFPt3OLJx7lRcV4WShGLgzJ4KRg_HuwFwJ49OmHxTbNpCp-W2UcM2jNLHNJirmuRH';
+  String secret =
+      'ENPMynhdDglOOBis0QlkllyUZqmFstJgWwoJ45xJaec3D-QjGln5-8XMxZPz9-rVHGxorp9b53foIIm3';
 
   // for getting the access token from Paypal
   Future<String> getAccessToken() async {
     try {
       var client = BasicAuthClient(clientId, secret);
-      var response = await client.post('$domain/v1/oauth2/token?grant_type=client_credentials');
+      var response = await client
+          .post('$domain/v1/oauth2/token?grant_type=client_credentials');
+          print("9999999     *******   ======");
+          print(response.statusCode);
       if (response.statusCode == 200) {
         final body = convert.jsonDecode(response.body);
+        print("ppppppppppp    ----   ======  ");
+        print(body["access_token"]);
         return body["access_token"];
+      } else {
+        return null;
       }
-      return null;
     } catch (e) {
       rethrow;
     }
@@ -30,13 +37,16 @@ class PaypalServices {
   // for creating the payment request with Paypal
   Future<Map<String, String>> createPaypalPayment(
       transactions, accessToken) async {
-    try {
+   try {
       var response = await http.post("$domain/v1/payments/payment",
           body: convert.jsonEncode(transactions),
           headers: {
             "content-type": "application/json",
             'Authorization': 'Bearer ' + accessToken
           });
+       print("create paypal payment");
+       print(response.statusCode);
+       print(response.body);
 
       final body = convert.jsonDecode(response.body);
       if (response.statusCode == 201) {

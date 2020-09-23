@@ -22,14 +22,18 @@ class PaypalPaymentState extends State<PaypalPayment> {
   PaypalServices services = PaypalServices();
 
   // you can change default currency according to your need
-  Map<dynamic,dynamic> defaultCurrency = {"symbol": "USD ", "decimalDigits": 2, "symbolBeforeTheNumber": true, "currency": "USD"};
+  Map<dynamic, dynamic> defaultCurrency = {
+    "symbol": "USD ",
+    "decimalDigits": 2,
+    "symbolBeforeTheNumber": true,
+    "currency": "USD"
+  };
 
   bool isEnableShipping = false;
   bool isEnableAddress = false;
 
-  String returnURL = 'return.example.com';
-  String cancelURL= 'cancel.example.com';
-
+  String returnURL = 'https://xenome.app/';
+  String cancelURL = 'https://xenome.app/';
 
   @override
   void initState() {
@@ -40,8 +44,13 @@ class PaypalPaymentState extends State<PaypalPayment> {
         accessToken = await services.getAccessToken();
 
         final transactions = getOrderParams();
+        print("transactions");
+        print(transactions);
         final res =
             await services.createPaypalPayment(transactions, accessToken);
+
+        print("res for services");
+        print(res);
         if (res != null) {
           setState(() {
             checkoutUrl = res["approvalUrl"];
@@ -49,7 +58,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
           });
         }
       } catch (e) {
-        print('exception: '+e.toString());
+        print('exception: ' + e.toString());
         final snackBar = SnackBar(
           content: Text(e.toString()),
           duration: Duration(seconds: 10),
@@ -80,7 +89,6 @@ class PaypalPaymentState extends State<PaypalPayment> {
       }
     ];
 
-
     // checkout invoice details
     String totalAmount = '1.99';
     String subTotalAmount = '1.99';
@@ -106,8 +114,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
             "details": {
               "subtotal": subTotalAmount,
               "shipping": shippingCost,
-              "shipping_discount":
-                  ((-1.0) * shippingDiscountCost).toString()
+              "shipping_discount": ((-1.0) * shippingDiscountCost).toString()
             }
           },
           "description": "The payment transaction description.",
@@ -116,28 +123,23 @@ class PaypalPaymentState extends State<PaypalPayment> {
           },
           "item_list": {
             "items": items,
-            // if (isEnableShipping &&
-            //     isEnableAddress)
-              "shipping_address": {
-                "recipient_name": userFirstName +
-                    " " +
-                    userLastName,
-                "line1": addressStreet,
-                "line2": "",
-                "city": addressCity,
-                "country_code": addressCountry,
-                "postal_code": addressZipCode,
-                "phone": addressPhoneNumber,
-                "state": addressState
-              },
+            if (isEnableShipping &&
+                isEnableAddress)
+            "shipping_address": {
+              "recipient_name": userFirstName + " " + userLastName,
+              "line1": addressStreet,
+              "line2": "",
+              "city": addressCity,
+              "country_code": addressCountry,
+              "postal_code": addressZipCode,
+              "phone": addressPhoneNumber,
+              "state": addressState
+            },
           }
         }
       ],
       "note_to_payer": "Contact us for any questions on your order.",
-      "redirect_urls": {
-        "return_url": returnURL,
-        "cancel_url": cancelURL
-      }
+      "redirect_urls": {"return_url": returnURL, "cancel_url": cancelURL}
     };
     return temp;
   }

@@ -23,6 +23,7 @@ class PaypalServices {
           print(response.statusCode);
       if (response.statusCode == 200) {
         final body = convert.jsonDecode(response.body);
+        
         print("ppppppppppp    ----   ======  ");
         print(body["access_token"]);
         return body["access_token"];
@@ -49,6 +50,7 @@ class PaypalServices {
        print(response.body);
 
       final body = convert.jsonDecode(response.body);
+
       if (response.statusCode == 201) {
         if (body["links"] != null && body["links"].length > 0) {
           List links = body["links"];
@@ -88,6 +90,8 @@ class PaypalServices {
 
       final body = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
+        print("=====  execute payment =====");
+        print(body);
         return body["id"];
       }
       return null;

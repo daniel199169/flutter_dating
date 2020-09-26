@@ -59,6 +59,7 @@ class _LoginCheckState extends State<LoginCheck> {
   @override
   Widget build(BuildContext context) {
     authStatus = CheckAuthState();
+
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
         return buildWaitingScreen();

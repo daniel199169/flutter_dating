@@ -2,6 +2,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'paypal_service.dart';
+import 'dart:async';
 
 class PaypalPayment extends StatefulWidget {
   final Function onFinish;
@@ -20,6 +21,8 @@ class PaypalPaymentState extends State<PaypalPayment> {
   String executeUrl;
   String accessToken;
   PaypalServices services = PaypalServices();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   // you can change default currency according to your need
   Map<dynamic, dynamic> defaultCurrency = {
@@ -123,18 +126,17 @@ class PaypalPaymentState extends State<PaypalPayment> {
           },
           "item_list": {
             "items": items,
-            if (isEnableShipping &&
-                isEnableAddress)
-            "shipping_address": {
-              "recipient_name": userFirstName + " " + userLastName,
-              "line1": addressStreet,
-              "line2": "",
-              "city": addressCity,
-              "country_code": addressCountry,
-              "postal_code": addressZipCode,
-              "phone": addressPhoneNumber,
-              "state": addressState
-            },
+            if (isEnableShipping && isEnableAddress)
+              "shipping_address": {
+                "recipient_name": userFirstName + " " + userLastName,
+                "line1": addressStreet,
+                "line2": "",
+                "city": addressCity,
+                "country_code": addressCountry,
+                "postal_code": addressZipCode,
+                "phone": addressPhoneNumber,
+                "state": addressState
+              },
           }
         }
       ],
@@ -161,6 +163,9 @@ class PaypalPaymentState extends State<PaypalPayment> {
         body: WebView(
           initialUrl: checkoutUrl,
           javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            _controller.complete(webViewController);
+          },
           navigationDelegate: (NavigationRequest request) {
             if (request.url.contains(returnURL)) {
               final uri = Uri.parse(request.url);

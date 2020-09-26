@@ -9,8 +9,6 @@ import 'package:nubae/models/ProfileImages.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
 
 class ProfilePage extends StatefulWidget {
- 
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -37,14 +35,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   getImages() async {
-    ProfileImages _getImages = await ProfileManager.getImages(SessionManager.getUserId());
+    ProfileImages _getImages =
+        await ProfileManager.getImages(SessionManager.getUserId());
     setState(() {
       myimages = _getImages;
     });
   }
 
   getName() async {
-    String _getName = await ProfileManager.getUserName(SessionManager.getUserId());
+    String _getName =
+        await ProfileManager.getUserName(SessionManager.getUserId());
     setState(() {
       userName = _getName;
     });
@@ -58,7 +58,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   getHobby() async {
-    String cuisineValue = await ProfileManager.getHobbyCuisine(SessionManager.getUserId());
+    String cuisineValue =
+        await ProfileManager.getHobbyCuisine(SessionManager.getUserId());
     String entertainmentValue =
         await ProfileManager.getHobbyEntertainment(SessionManager.getUserId());
     String recreationValue =
@@ -144,7 +145,8 @@ class _ProfilePageState extends State<ProfilePage> {
         myphoto2URL: myimages.myphoto2URL,
         myphoto3URL: myimages.myphoto3URL,
       );
-      await ProfileManager.updateImages(sendmyImages, SessionManager.getUserId());
+      await ProfileManager.updateImages(
+          sendmyImages, SessionManager.getUserId());
     }
   }
 
@@ -158,7 +160,8 @@ class _ProfilePageState extends State<ProfilePage> {
       content = _recreationValue;
     }
 
-    await ProfileManager.updateHobby(hobbytype, content, SessionManager.getUserId());
+    await ProfileManager.updateHobby(
+        hobbytype, content, SessionManager.getUserId());
   }
 
   @override
@@ -204,12 +207,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           side: new BorderSide(color: Color(0xFF272D3A))),
                       itemBuilder: (_) => <PopupMenuItem<String>>[
                         new PopupMenuItem<String>(
-                          child: Text('Edit',
-                              style: TextStyle(color: Color(0xFF868E9C))),
-                          value: 'Edit',
-                          height: 40,
-                        ),
-                        new PopupMenuItem<String>(
                           child: Text('Delete',
                               style: TextStyle(color: Color(0xFF868E9C))),
                           value: 'Delete',
@@ -219,8 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       icon:
                           Icon(Icons.more_vert, size: 30, color: Colors.white),
                       onSelected: (value) async {
-                        if (value == "Edit") {
-                        } else if (value == "Delete") {}
+                        if (value == "Delete") {}
                       },
                       color: Colors.black,
                     ),

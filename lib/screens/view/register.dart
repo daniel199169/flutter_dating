@@ -67,6 +67,9 @@ class _RegisterPageState extends State<RegisterPage> {
       myLocationButtonEnabled: true,
       layersButtonEnabled: true,
     );
+
+    print("**********   88888888888   **********");
+    print(result);
     _nubaeAddressLocationController.text = result.address;
     setState(() {
       _pubLatLang = result.latLng;

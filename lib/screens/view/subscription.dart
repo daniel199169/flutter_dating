@@ -69,7 +69,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                     fontWeight: FontWeight.bold, fontSize: 24)),
                           ),
                           Text("Month", style: TextStyle(fontSize: 24)),
-                          Text("\$5.95 ", style: TextStyle(fontSize: 24)),
+                          Text("\$5.99 ", style: TextStyle(fontSize: 24)),
                           SizedBox(
                             height: 30,
                           ),

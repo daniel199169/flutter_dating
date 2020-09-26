@@ -6,6 +6,7 @@ import 'package:nubae/screens/view/homepage.dart';
 import 'package:nubae/firebase_services/user_manager.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
 import 'package:nubae/utils/session_manager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -35,8 +36,10 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   getCoordinate() async {
-    double _mylat = await ProfileManager.getLatitude(SessionManager.getUserId());
-    double _mylon = await ProfileManager.getLongitude(SessionManager.getUserId());
+    double _mylat =
+        await ProfileManager.getLatitude(SessionManager.getUserId());
+    double _mylon =
+        await ProfileManager.getLongitude(SessionManager.getUserId());
     setState(() {
       myLatitude = _mylat;
       myLongitude = _mylon;
@@ -183,7 +186,15 @@ class _SearchPageState extends State<SearchPage> {
                       style: TextStyle(color: Colors.white, fontSize: 20),
                       onChanged: (String newValue) {
                         setState(() {
-                          _cuisineValue = newValue;
+                          if (_entertainmentValue != "" ||
+                              _recreationValue != "") {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "You can only one items on Cuisine, Entertainment, Recreation");
+                            _cuisineValue = "";
+                          } else {
+                            _cuisineValue = newValue;
+                          }
                         });
                       },
                       items: ["", "Brunch", "Lunch", "Dinner"]
@@ -212,7 +223,14 @@ class _SearchPageState extends State<SearchPage> {
                       style: TextStyle(color: Colors.white, fontSize: 20),
                       onChanged: (String newValue) {
                         setState(() {
-                          _entertainmentValue = newValue;
+                          if (_cuisineValue != "" || _recreationValue != "") {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "You can only one items on Cuisine, Entertainment, Recreation");
+                            _entertainmentValue = "";
+                          } else {
+                            _entertainmentValue = newValue;
+                          }
                         });
                       },
                       items: ["", "Happy hour", "Hookah", "Movies", "Mall"]
@@ -241,7 +259,15 @@ class _SearchPageState extends State<SearchPage> {
                       style: TextStyle(color: Colors.white, fontSize: 20),
                       onChanged: (String newValue) {
                         setState(() {
-                          _recreationValue = newValue;
+                          if (_cuisineValue != "" ||
+                              _entertainmentValue != "") {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "You can only one items on Cuisine, Entertainment, Recreation");
+                            _recreationValue = "";
+                          } else {
+                            _recreationValue = newValue;
+                          }
                         });
                       },
                       items: ["", "Gym", "Park", "Biking", "Running"]

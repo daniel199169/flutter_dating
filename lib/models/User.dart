@@ -2,7 +2,8 @@ import 'ProfileImages.dart';
 
 class User {
   String uid;
-  String userName;
+  String firstName;
+  String lastName;
   int age;
   String race;
   String city;
@@ -13,10 +14,14 @@ class User {
   double latitude;
   double longitude;
   ProfileImages myimage;
+  int phone;
+  int postalcode;
+  String country;
 
   User({
     this.uid,
-    this.userName,
+    this.firstName,
+    this.lastName,
     this.age,
     this.race,
     this.city,
@@ -27,11 +32,15 @@ class User {
     this.latitude,
     this.longitude,
     this.myimage,
+    this.phone,
+    this.postalcode,
+    this.country,
   });
 
   User.fromJson(Map<dynamic, dynamic> json) {
     uid = json['uid'];
-    userName = json['userName'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
     age = json['age'];
     race = json['race'];
     city = json['city'];
@@ -42,12 +51,16 @@ class User {
     latitude = json['latitude'];
     longitude = json['longitude'];
     myimage = ProfileImages.fromJson(json['images']);
+    phone = json['phone'];
+    postalcode = json['postalcode'];
+    country = json['country'];
   }
 
   Map<dynamic, dynamic> toJson() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     data['uid'] = this.uid;
-    data['userName'] = this.userName;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
     data['age'] = this.age;
     data['race'] = this.race;
     data['city'] = this.city;
@@ -58,7 +71,9 @@ class User {
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     data['myimage'] = this.myimage.toJson();
-
+    data['phone'] = this.phone;
+    data['postalcode'] = this.postalcode;
+    data['country'] = this.country;
     return data;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/screens/view/subscribe/paypal_payment.dart';
+
 class SubscriptionPage extends StatefulWidget {
   @override
   _SubscriptionPageState createState() => _SubscriptionPageState();
@@ -41,70 +42,139 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         body: Container(
             width: width,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-            height: height * 0.7,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: InkWell(
-                  onTap: () {},
-                  child: new GridTile(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Get our premium plans",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 27,
-                                    color: Colors.orange)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 40),
-                            child: Text("1",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 24)),
-                          ),
-                          Text("Month", style: TextStyle(fontSize: 24)),
-                          Text("\$5.99 ", style: TextStyle(fontSize: 24)),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      PaypalPayment(
-                                    onFinish: (number) async {
-                                      // payment done
-                                      print('order id: ' + number);
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                            color: Colors.orange,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 15),
-                              child: Text(
-                                "Continue",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
+            height: height,
+            child: Column(children: <Widget>[
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                child: InkWell(
+                    onTap: () {},
+                    child: new GridTile(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Get our premium plans",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 27,
+                                      color: Colors.orange)),
                             ),
-                          )
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Text("1 Month",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24)),
+                            ),
+                            Text("\$5.99 ", style: TextStyle(fontSize: 24)),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        PaypalPayment(
+                                      onFinish: (number) async {
+                                        // payment done
+                                        print('order id: ' + number);
+                                      },
+                                      membershiptype: "month",
+                                    ),
+                                  ),
+                                );
+                              },
+                              color: Colors.orange,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 15),
+                                child: Text(
+                                  "Continue",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  )),
-            )));
+                    )),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                child: InkWell(
+                    onTap: () {},
+                    child: new GridTile(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Get our premium plans",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 27,
+                                      color: Colors.orange)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Text("1 Year",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24)),
+                            ),
+                            Text("\$71.89 ", style: TextStyle(fontSize: 24)),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        PaypalPayment(
+                                      onFinish: (number) async {
+                                        // payment done
+                                        print('order id: ' + number);
+                                      },
+                                      membershiptype: "Year",
+                                    ),
+                                  ),
+                                );
+                              },
+                              color: Colors.orange,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 15),
+                                child: Text(
+                                  "Continue",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
+              )
+            ])));
   }
 }
-

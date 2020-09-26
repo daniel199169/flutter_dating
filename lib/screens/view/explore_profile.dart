@@ -76,7 +76,7 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
                   padding: EdgeInsets.all(15),
                   alignment: Alignment.bottomLeft,
                   height: height * 0.25,
-                  child: Text("${widget.userDetails.userName}",
+                  child: Text("${widget.userDetails.firstName + " " + widget.userDetails.lastName}",
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,

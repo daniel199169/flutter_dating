@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nubae/firebase_services/authentication.dart';
 import 'package:nubae/screens/view/cloud_message.dart';
 import 'package:nubae/utils/session_manager.dart';
-import 'package:nubae/screens/view/login.dart';
 import 'package:nubae/screens/view/search.dart';
 
 enum AuthStatus {

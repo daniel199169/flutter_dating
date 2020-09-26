@@ -13,13 +13,16 @@ abstract class BaseAuth {
   Future<String> signUp(
       String email,
       String password,
-      String username,
+      String firstname,
+      String lastname,
       int age,
       bool maleGender,
       String race,
       String country,
       String city,
-      LatLng userlocation);
+      LatLng userlocation,
+      int phone,
+      int postalcode);
 
   // Future<bool> signOut();
 
@@ -47,13 +50,16 @@ class DateAuth implements BaseAuth {
   Future<String> signUp(
       String email,
       String password,
-      String username,
+      String firstname,
+      String lastname,
       int age,
       bool maleGender,
       String race,
       String country,
       String city,
-      LatLng userlocation) async {
+      LatLng userlocation,
+      int phone,
+      int postalcode) async {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     print(result);
@@ -66,7 +72,8 @@ class DateAuth implements BaseAuth {
           .document(user.uid)
           .setData({
             "uid": user.uid,
-            "userName": username,
+            "firstName": firstname,
+            "lastName": lastname,
             "email": email,
             "age": age,
             "male": maleGender,
@@ -79,6 +86,8 @@ class DateAuth implements BaseAuth {
             "Cuisine": "",
             "Entertainment": "",
             "Recreation": "",
+            "phone": phone,
+            "postalcode": postalcode,
           })
           .then((result) => {})
           .catchError((err) => print(err));

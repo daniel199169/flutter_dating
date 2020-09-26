@@ -339,7 +339,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           child: ListTile(
                             leading: CircleAvatar(child: Icon(Icons.person)),
                             title: Text(
-                              widget.searchData[index].userName,
+                              widget.searchData[index].firstName + " " + widget.searchData[index].lastName,
                               style: cardTextStyle,
                             ),
                             subtitle: Text(

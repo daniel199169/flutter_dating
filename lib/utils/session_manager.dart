@@ -11,7 +11,12 @@ class SessionManager {
   static final String KEY_EMAIL = 'key_email';
   static final String KEY_IMAGE = 'key_image';
   static final String KEY_USER_ID = 'key_user_id';
-  static final String KEY_USER_NAME = 'key_user_name';
+  static final String KEY_FIRST_NAME = 'key_firstname';
+  static final String KEY_LAST_NAME = 'key_lastname';
+  static final String KEY_CITY = 'key_city';
+  static final String KEY_PHONE = 'key_phone';
+  static final String KEY_POSTALCODE = 'key_postalcode';
+  static final String KEY_COUNTRY = 'key_country';
 
   static SharedPreferences _sharedPrefs;
 
@@ -31,6 +36,13 @@ class SessionManager {
 
   static void saveUserInfoToLocal(User userInfo) {
     SessionManager.setUserId(userInfo.uid);
+    SessionManager.setFirstName(userInfo.firstName);
+    SessionManager.setLastName(userInfo.lastName);
+    SessionManager.setImage(userInfo.myimage.myimageURL);
+    SessionManager.setCity(userInfo.city);
+    SessionManager.setPhone(userInfo.phone.toString());
+    SessionManager.setPostalCode(userInfo.postalcode.toString());
+    SessionManager.setCountry(userInfo.country);
   }
 
   static bool isLoggin() {
@@ -44,6 +56,55 @@ class SessionManager {
 
   static void setUserId(String userId) {
     _sharedPrefs.setString(KEY_USER_ID, userId);
+  }
+
+  static String getFirstName() {
+    return _sharedPrefs.getString(KEY_FIRST_NAME) ?? '';
+  }
+
+  static void setFirstName(String firstname) {
+    _sharedPrefs.setString(KEY_FIRST_NAME, firstname);
+  }
+  
+
+  static String getCountry() {
+    return _sharedPrefs.getString(KEY_COUNTRY) ?? '';
+  }
+
+  static void setCountry(String country) {
+    _sharedPrefs.setString(KEY_COUNTRY, country);
+  }
+
+  static String getLastName() {
+    return _sharedPrefs.getString(KEY_LAST_NAME) ?? '';
+  }
+
+  static void setLastName(String lastname) {
+    _sharedPrefs.setString(KEY_LAST_NAME, lastname);
+  }
+
+  static String getCity() {
+    return _sharedPrefs.getString(KEY_CITY) ?? '';
+  }
+
+  static void setCity(String city) {
+    _sharedPrefs.setString(KEY_CITY, city);
+  }
+
+  static String getPhone() {
+    return _sharedPrefs.getString(KEY_PHONE) ?? '';
+  }
+
+  static void setPhone(String phone) {
+    _sharedPrefs.setString(KEY_PHONE, phone);
+  }
+
+  static String getPostalCode() {
+    return _sharedPrefs.getString(KEY_POSTALCODE) ?? '';
+  }
+
+  static void setPostalCode(String postalcode) {
+    _sharedPrefs.setString(KEY_POSTALCODE, postalcode);
   }
 
   static void hasLoggedIn() {
@@ -72,10 +133,6 @@ class SessionManager {
 
   static String getImage() {
     return _sharedPrefs.getString(KEY_IMAGE) ?? '';
-  }
-
-   static String getUserName() {
-    return _sharedPrefs.getString(KEY_USER_NAME) ?? '';
   }
 
   static void setImage(String image) {

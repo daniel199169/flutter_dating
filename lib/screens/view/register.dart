@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nubae/authentication/authentication.dart';
 import 'package:nubae/screens/view/constants.dart';
@@ -9,7 +9,6 @@ import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nubae/utils/static_data_service.dart';
-import 'package:nubae/firebase_services/authentication.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -21,10 +20,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
 //  _textControllers
 
-  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _postalController = TextEditingController();
   TextEditingController _raceController = TextEditingController();
   TextEditingController _countryController = TextEditingController();
   TextEditingController _nubaeAddressLocationController =
@@ -32,21 +34,28 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _male = false;
 
   _register() async {
-    if (_emailController.text.isNotEmpty &&
+    if (_firstNameController.text.isNotEmpty &&
+        _lastNameController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
         _passwordController.text.isNotEmpty &&
         _ageController.text.isNotEmpty &&
         _raceController.text.isNotEmpty &&
-        _nubaeAddressLocationController.text.isNotEmpty) {
+        _nubaeAddressLocationController.text.isNotEmpty &&
+        _phoneController.text.isNotEmpty &&
+        _postalController.text.isNotEmpty) {
       var resonse = await DateAuth().signUp(
           _emailController.text,
           _passwordController.text,
-          _userNameController.text,
+          _firstNameController.text,
+          _lastNameController.text,
           int.parse(_ageController.text),
           _male,
           _raceController.text,
           _countryController.text,
           _nubaeAddressLocationController.text,
-          _pubLatLang);
+          _pubLatLang,
+          int.parse(_phoneController.text),
+          int.parse(_postalController.text));
 
       print("--------   ======   --------");
       print(resonse);
@@ -128,13 +137,29 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               color: Colors.black.withOpacity(0.5),
                               child: TextField(
-                                controller: _userNameController,
+                                controller: _firstNameController,
                                 style: TextStyle(color: Colors.white),
                                 decoration: InputDecoration(
                                     icon:
                                         Icon(Icons.person, color: Colors.white),
                                     hintStyle: TextStyle(color: Colors.white),
-                                    hintText: "User Name"),
+                                    hintText: "First Name"),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              color: Colors.black.withOpacity(0.5),
+                              child: TextField(
+                                controller: _lastNameController,
+                                style: TextStyle(color: Colors.white),
+                                decoration: InputDecoration(
+                                    icon:
+                                        Icon(Icons.person, color: Colors.white),
+                                    hintStyle: TextStyle(color: Colors.white),
+                                    hintText: "Last Name"),
                               ),
                             ),
                             SizedBox(
@@ -176,6 +201,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               child: TextField(
                                 style: TextStyle(color: Colors.white),
+                                inputFormatters: <TextInputFormatter>[
+                                  WhitelistingTextInputFormatter.digitsOnly
+                                ],
                                 controller: _ageController,
                                 decoration: InputDecoration(
                                     icon: Icon(Icons.calendar_today,
@@ -192,12 +220,50 @@ class _RegisterPageState extends State<RegisterPage> {
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               child: TextField(
                                 style: TextStyle(color: Colors.white),
+                                controller: _phoneController,
+                                inputFormatters: <TextInputFormatter>[
+                                  WhitelistingTextInputFormatter.digitsOnly
+                                ],
+                                decoration: InputDecoration(
+                                    icon:
+                                        Icon(Icons.phone, color: Colors.white),
+                                    hintStyle: TextStyle(color: Colors.white),
+                                    hintText: "Phone Number"),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              color: Colors.black.withOpacity(0.5),
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: TextField(
+                                style: TextStyle(color: Colors.white),
                                 controller: _countryController,
                                 decoration: InputDecoration(
                                     icon:
                                         Icon(Icons.public, color: Colors.white),
                                     hintStyle: TextStyle(color: Colors.white),
                                     hintText: "Country"),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              color: Colors.black.withOpacity(0.5),
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: TextField(
+                                style: TextStyle(color: Colors.white),
+                                inputFormatters: <TextInputFormatter>[
+                                  WhitelistingTextInputFormatter.digitsOnly
+                                ],
+                                controller: _postalController,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.location_on,
+                                        color: Colors.white),
+                                    hintStyle: TextStyle(color: Colors.white),
+                                    hintText: "Postal Code"),
                               ),
                             ),
                             SizedBox(

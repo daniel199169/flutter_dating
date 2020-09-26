@@ -33,6 +33,8 @@ class _SearchPageState extends State<SearchPage> {
     // TODO: implement initState
     getCoordinate();
     super.initState();
+    print("=====   Test for sessiong   =====");
+    print(SessionManager.getCity());
   }
 
   getCoordinate() async {

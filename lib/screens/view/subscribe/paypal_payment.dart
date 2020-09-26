@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:nubae/utils/session_manager.dart';
 import 'paypal_service.dart';
 import 'dart:async';
 
 class PaypalPayment extends StatefulWidget {
   final Function onFinish;
-
-  PaypalPayment({this.onFinish});
+  final String membershiptype;
+  PaypalPayment({this.onFinish, this.membershiptype});
 
   @override
   State<StatefulWidget> createState() {
@@ -79,7 +80,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
 
   // item name, price and quantity
   String itemName = 'iPhone X';
-  String itemPrice = '1.99';
+  String itemPrice = '5.99';
   int quantity = 1;
 
   Map<String, dynamic> getOrderParams() {
@@ -93,18 +94,23 @@ class PaypalPaymentState extends State<PaypalPayment> {
     ];
 
     // checkout invoice details
-    String totalAmount = '1.99';
-    String subTotalAmount = '1.99';
+    String totalAmount = '';
+    String location = SessionManager.getCity();
+    widget.membershiptype == "month"
+    ? totalAmount = '6.3'
+    : totalAmount = '75.5';
+    
+    String subTotalAmount = totalAmount;
     String shippingCost = '0';
     int shippingDiscountCost = 0;
-    String userFirstName = 'Gulshan';
-    String userLastName = 'Yadav';
+    String userFirstName = SessionManager.getFirstName();
+    String userLastName = SessionManager.getLastName();
     String addressCity = 'Delhi';
     String addressStreet = 'Mathura Road';
-    String addressZipCode = '110014';
-    String addressCountry = 'India';
+    String addressZipCode = SessionManager.getPostalCode();
+    String addressCountry = SessionManager.getCountry();
     String addressState = 'Delhi';
-    String addressPhoneNumber = '+919990119091';
+    String addressPhoneNumber = '+' + SessionManager.getPhone();
 
     Map<String, dynamic> temp = {
       "intent": "sale",

@@ -350,7 +350,7 @@ class _ChatPageState extends State<ChatPage> {
                                           chat.messages[index].senderID !=
                                                   SessionManager.getUserId()
                                               ? widget.receiverName[0]
-                                              : SessionManager.getUserName()[0],
+                                              : SessionManager.getFirstName() + SessionManager.getLastName(),
                                           style: TextStyle(
                                               fontSize: 100,
                                               color: Colors.white),

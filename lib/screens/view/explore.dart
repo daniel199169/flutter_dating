@@ -69,7 +69,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           Colors.transparent
                         ])),
                         child: new Text(
-                          data[index].userName,
+                          data[index].firstName + " " + data[index].lastName,
                           style: TextStyle(color: Colors.white, fontSize: 15),
                         )),
                     child: Image.network(

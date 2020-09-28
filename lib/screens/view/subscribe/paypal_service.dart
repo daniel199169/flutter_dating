@@ -19,13 +19,11 @@ class PaypalServices {
       var client = BasicAuthClient(clientId, secret);
       var response = await client
           .post('$domain/v1/oauth2/token?grant_type=client_credentials');
-          print("9999999     *******   ======");
-          print(response.statusCode);
+          
       if (response.statusCode == 200) {
         final body = convert.jsonDecode(response.body);
         
-        print("ppppppppppp    ----   ======  ");
-        print(body["access_token"]);
+       
         return body["access_token"];
       } else {
         return null;
@@ -45,9 +43,7 @@ class PaypalServices {
             "content-type": "application/json",
             'Authorization': 'Bearer ' + accessToken
           });
-       print("create paypal payment");
-       print(response.statusCode);
-       print(response.body);
+      
 
       final body = convert.jsonDecode(response.body);
 
@@ -90,8 +86,7 @@ class PaypalServices {
 
       final body = convert.jsonDecode(response.body);
       if (response.statusCode == 200) {
-        print("=====  execute payment =====");
-        print(body);
+       
         return body["id"];
       }
       return null;

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/screens/view/subscribe/paypal_payment.dart';
+import 'package:nubae/utils/session_manager.dart';
 
 class SubscriptionPage extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+   
   }
 
   @override

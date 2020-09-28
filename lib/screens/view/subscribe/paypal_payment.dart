@@ -38,7 +38,8 @@ class PaypalPaymentState extends State<PaypalPayment> {
 
   String returnURL = 'https://xenome.app/';
   String cancelURL = 'https://xenome.app/';
-
+  String itemName = 'iPhone X';
+  String itemPrice = '';
   @override
   void initState() {
     super.initState();
@@ -76,11 +77,12 @@ class PaypalPaymentState extends State<PaypalPayment> {
         _scaffoldKey.currentState.showSnackBar(snackBar);
       }
     });
+
+    widget.membershiptype == "month" ? itemPrice = '6.3' : itemPrice = '75.5';
   }
 
   // item name, price and quantity
-  String itemName = 'iPhone X';
-  String itemPrice = '5.99';
+
   int quantity = 1;
 
   Map<String, dynamic> getOrderParams() {
@@ -96,20 +98,22 @@ class PaypalPaymentState extends State<PaypalPayment> {
     // checkout invoice details
     String totalAmount = '';
     String location = SessionManager.getCity();
+    var getinfo = location.split(",");
+
     widget.membershiptype == "month"
-    ? totalAmount = '6.3'
-    : totalAmount = '75.5';
-    
+        ? totalAmount = '6.3'
+        : totalAmount = '75.5';
+
     String subTotalAmount = totalAmount;
     String shippingCost = '0';
     int shippingDiscountCost = 0;
     String userFirstName = SessionManager.getFirstName();
     String userLastName = SessionManager.getLastName();
-    String addressCity = 'Delhi';
-    String addressStreet = 'Mathura Road';
+    String addressCity = getinfo[1];
+    String addressStreet = getinfo[0];
     String addressZipCode = SessionManager.getPostalCode();
     String addressCountry = SessionManager.getCountry();
-    String addressState = 'Delhi';
+    String addressState = getinfo[1];
     String addressPhoneNumber = '+' + SessionManager.getPhone();
 
     Map<String, dynamic> temp = {

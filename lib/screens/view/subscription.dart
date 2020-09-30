@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/screens/view/subscribe/paypal_payment.dart';
 import 'package:nubae/utils/session_manager.dart';
+import 'package:nubae/firebase_services/subscribe_manager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SubscriptionPage extends StatefulWidget {
   @override
@@ -21,7 +23,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   
   }
 
   @override
@@ -80,19 +81,27 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             RaisedButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        PaypalPayment(
-                                      onFinish: (number) async {
-                                        // payment done
-                                        print('order id: ' + number);
-                                      },
-                                      membershiptype: "month",
+                              onPressed: () async {
+                                String possible =
+                                    await SubscribeManager.alreadySubscribed(
+                                        SessionManager.getUserId(), "Month");
+                                if (possible == "possible") {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          PaypalPayment(
+                                        onFinish: (number) async {
+                                          // payment done
+                                          print('order id: ' + number);
+                                        },
+                                        membershiptype: "Month",
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "You have already subscribed");
+                                }
                               },
                               color: Colors.orange,
                               child: Padding(
@@ -147,19 +156,27 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             RaisedButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        PaypalPayment(
-                                      onFinish: (number) async {
-                                        // payment done
-                                        print('order id: ' + number);
-                                      },
-                                      membershiptype: "Year",
+                              onPressed: () async {
+                                String possible =
+                                    await SubscribeManager.alreadySubscribed(
+                                        SessionManager.getUserId(), "Month");
+                                if (possible == "possible") {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          PaypalPayment(
+                                        onFinish: (number) async {
+                                          // payment done
+                                          print('order id: ' + number);
+                                        },
+                                        membershiptype: "Year",
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "You have already subscribed");
+                                }
                               },
                               color: Colors.orange,
                               child: Padding(

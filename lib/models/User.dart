@@ -17,6 +17,7 @@ class User {
   int phone;
   int postalcode;
   String country;
+  DateTime signupDate;
 
   User({
     this.uid,
@@ -35,6 +36,7 @@ class User {
     this.phone,
     this.postalcode,
     this.country,
+    this.signupDate,
   });
 
   User.fromJson(Map<dynamic, dynamic> json) {
@@ -54,6 +56,7 @@ class User {
     phone = json['phone'];
     postalcode = json['postalcode'];
     country = json['country'];
+    signupDate = json['signupDate'].toDate();
   }
 
   Map<dynamic, dynamic> toJson() {
@@ -74,6 +77,7 @@ class User {
     data['phone'] = this.phone;
     data['postalcode'] = this.postalcode;
     data['country'] = this.country;
+    data['signupDate'] = this.signupDate;
     return data;
   }
 }

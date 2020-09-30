@@ -18,9 +18,10 @@ import 'package:nubae/firebase_services/likes_manager.dart';
 import 'package:nubae/utils/session_manager.dart';
 import 'package:nubae/verification/login_check.dart';
 import 'package:nubae/screens/view/chat_screens/chatsPage.dart';
+import 'package:nubae/firebase_services/subscribe_manager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
- 
   final List<User> searchData;
 
   HomePage({this.searchData});
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   var currentPageValue = 0.0;
 
   CardController controller;
-
+  String userStatus = "";
   ProfileImages myimages;
 
   @override
@@ -50,10 +51,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         currentPageValue = _pageController.page;
       });
     });
+    getUserStatus();
+  }
+
+  getUserStatus() async {
+    String _userStatus =
+        await SubscribeManager.getUserStatus(SessionManager.getUserId());
+    setState(() {
+      userStatus = _userStatus;
+      print("========    %%%%%    ========");
+      print(userStatus);
+    });
   }
 
   getImages() async {
-    ProfileImages _getImages = await ProfileManager.getImages(SessionManager.getUserId());
+    ProfileImages _getImages =
+        await ProfileManager.getImages(SessionManager.getUserId());
     setState(() {
       myimages = _getImages;
     });
@@ -108,8 +121,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
                 InkWell(
-                  onTap: () => Navigator.push(
-                      context, FadeRoute(page: ProfilePage())),
+                  onTap: () =>
+                      Navigator.push(context, FadeRoute(page: ProfilePage())),
                   child: Column(
                     children: [
                       myimages.myimageURL == ""
@@ -211,8 +224,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context, FadeRoute(page: ExplorePage()));
+                    if (userStatus == "Active") {
+                      Navigator.push(context, FadeRoute(page: ExplorePage()));
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "Please subscribe on setting page");
+                    }
+
                     // Navigator.of(context).push(CupertinoPageRoute(
                     //     builder: (context) => ExplorePage()));
                   },
@@ -339,7 +357,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           child: ListTile(
                             leading: CircleAvatar(child: Icon(Icons.person)),
                             title: Text(
-                              widget.searchData[index].firstName + " " + widget.searchData[index].lastName,
+                              widget.searchData[index].firstName +
+                                  " " +
+                                  widget.searchData[index].lastName,
                               style: cardTextStyle,
                             ),
                             subtitle: Text(

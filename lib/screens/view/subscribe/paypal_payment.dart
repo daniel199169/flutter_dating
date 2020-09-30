@@ -4,6 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:nubae/utils/session_manager.dart';
 import 'paypal_service.dart';
 import 'dart:async';
+import 'package:nubae/firebase_services/subscribe_manager.dart';
 
 class PaypalPayment extends StatefulWidget {
   final Function onFinish;
@@ -49,13 +50,10 @@ class PaypalPaymentState extends State<PaypalPayment> {
         accessToken = await services.getAccessToken();
 
         final transactions = getOrderParams();
-        print("transactions");
-        print(transactions);
+
         final res =
             await services.createPaypalPayment(transactions, accessToken);
 
-        print("res for services");
-        print(res);
         if (res != null) {
           setState(() {
             checkoutUrl = res["approvalUrl"];
@@ -78,7 +76,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
       }
     });
 
-    widget.membershiptype == "month" ? itemPrice = '6.3' : itemPrice = '75.5';
+    widget.membershiptype == "Month" ? itemPrice = '6.3' : itemPrice = '75.5';
   }
 
   // item name, price and quantity
@@ -100,7 +98,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
     String location = SessionManager.getCity();
     var getinfo = location.split(",");
 
-    widget.membershiptype == "month"
+    widget.membershiptype == "Month"
         ? totalAmount = '6.3'
         : totalAmount = '75.5';
 
@@ -158,9 +156,6 @@ class PaypalPaymentState extends State<PaypalPayment> {
 
   @override
   Widget build(BuildContext context) {
-    print("=======   88888   ========");
-    print(checkoutUrl);
-
     if (checkoutUrl != null) {
       return Scaffold(
         appBar: AppBar(
@@ -183,8 +178,10 @@ class PaypalPaymentState extends State<PaypalPayment> {
               if (payerID != null) {
                 services
                     .executePayment(executeUrl, payerID, accessToken)
-                    .then((id) {
+                    .then((id) async {
                   widget.onFinish(id);
+                  await SubscribeManager.addSubscribe(
+                      SessionManager.getUserId(), widget.membershiptype);
                   Navigator.of(context).pop();
                 });
               } else {

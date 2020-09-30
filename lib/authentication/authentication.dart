@@ -88,6 +88,7 @@ class DateAuth implements BaseAuth {
             "Recreation": "",
             "phone": phone,
             "postalcode": postalcode,
+            "signupDate" : DateTime.now(),
           })
           .then((result) => {})
           .catchError((err) => print(err));

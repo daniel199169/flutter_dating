@@ -8,8 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
 
 class ChatController {
-  static Future<String> createNewChat(
-      String chatID, String receiverID, String message, String receiverImage, String receiverName) async {
+  static Future<String> createNewChat(String chatID, String receiverID,
+      String message, String receiverImage, String receiverName) async {
     String currentChatID;
     await db
         .collection("Users")
@@ -50,27 +50,38 @@ class ChatController {
         });
 
         // Create subcollection on Users collection
-        await db.collection('Users').document(SessionManager.getUserId()).collection('chats').document(receiverID).setData({
-             "chatID": chatID,
-             "image": receiverImage,
-             "lastMessage": "",
-             "name": receiverName,
-             "timestamp": Timestamp.now(),
-             "uid": receiverID,
-             "unseenCount": 0,
+        await db
+            .collection('Users')
+            .document(SessionManager.getUserId())
+            .collection('chats')
+            .document(receiverID)
+            .setData({
+          "chatID": chatID,
+          "image": receiverImage,
+          "lastMessage": "",
+          "name": receiverName,
+          "timestamp": Timestamp.now(),
+          "uid": receiverID,
+          "unseenCount": 0,
         });
-        String myImage = await ProfileManager.getProfileImage(SessionManager.getUserId());
-        String myUserName = await ProfileManager.getUserName(SessionManager.getUserId());
-        await db.collection('Users').document(receiverID).collection('chats').document(SessionManager.getUserId()).setData({
-             "chatID": chatID,
-             "image": myImage,
-             "lastMessage": "",
-             "name": myUserName,
-             "timestamp": Timestamp.now(),
-             "uid": SessionManager.getUserId(),
-             "unseenCount": 0,
+        String myImage =
+            await ProfileManager.getProfileImage(SessionManager.getUserId());
+        String myUserName =
+            await ProfileManager.getUserName(SessionManager.getUserId());
+        await db
+            .collection('Users')
+            .document(receiverID)
+            .collection('chats')
+            .document(SessionManager.getUserId())
+            .setData({
+          "chatID": chatID,
+          "image": myImage,
+          "lastMessage": "",
+          "name": myUserName,
+          "timestamp": Timestamp.now(),
+          "uid": SessionManager.getUserId(),
+          "unseenCount": 0,
         });
-
       }
     });
     return currentChatID;
@@ -128,5 +139,23 @@ class ChatController {
         .collection("chats")
         .document(receiverID)
         .updateData({"unseenCount": 0});
+  }
+
+  static Future<List<ChatPart>> getDateHistory() async {
+    List<ChatPart> _list = [];
+
+    QuerySnapshot querySnapshot = await db
+        .collection("Users")
+        .document(SessionManager.getUserId())
+        .collection("chats")
+        .getDocuments();
+
+    if (querySnapshot == null || querySnapshot.documents.length == 0) {
+      return [];
+    }
+    _list = querySnapshot.documents.map((doc) {
+      return ChatPart.fromJson(doc.data);
+    }).toList();
+    return _list;
   }
 }

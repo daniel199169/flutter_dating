@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
+import 'package:nubae/firebase_services/chat_manager.dart';
+import 'package:nubae/models/chatPart.dart';
+import 'package:nubae/utils/session_manager.dart';
 
 class DateHistory extends StatefulWidget {
   @override
@@ -8,70 +12,30 @@ class DateHistory extends StatefulWidget {
 }
 
 class _DateHistoryState extends State<DateHistory> {
-  List _data = [
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-    {
-      "name": "Amy Whitefield",
-    },
-  ];
-
+  List<ChatPart> historyData = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getData();
+  }
+
+  getData() async {
+    List<ChatPart> _historyData = await ChatController.getDateHistory();
+    setState(() {
+      historyData = _historyData;
+    });
+    print("***************     ^^^^^^^^^^^^^^   ***************");
+    print(SessionManager.getUserId());
+    print(historyData.length);
+  }
+
+  convertTimeStamp(Timestamp timestamp) {
+    DateTime _date =
+        DateTime.fromMicrosecondsSinceEpoch(timestamp.microsecondsSinceEpoch);
+    String YYYY_MM_DD = _date.toIso8601String().split('T').first;
+
+    return YYYY_MM_DD;
   }
 
   @override
@@ -96,50 +60,59 @@ class _DateHistoryState extends State<DateHistory> {
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           height: height,
           child: GridView.builder(
-            itemCount: _data.length,
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 0.8),
+            itemCount: historyData.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 0.8),
             itemBuilder: (BuildContext context, int index) {
               return new Card(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)
-                ),
+                    borderRadius: BorderRadius.circular(15)),
                 child: InkWell(
                     onTap: () => Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) =>
-                            ViewOffer(_data[index]))),
+                        builder: (context) => ViewOffer(historyData[index]))),
                     child: new GridTile(
-                      
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             CircleAvatar(
-                              radius: 30,
-                              backgroundImage: AssetImage(
-                                  "assets/images/placeholderProfileImage.jpg"),
+                              radius: 50,
+                              backgroundImage:
+                                  NetworkImage(historyData[index].image),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("${_data[index]["name"]}",style: TextStyle(fontWeight: FontWeight.bold)),
+                              child: Text("${historyData[index].name}",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                             ),
-                            Text("Today, 1: 03"),
+                            Text(
+                              convertTimeStamp(historyData[index].timestamp),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             RaisedButton(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)
-                              ),
-                              onPressed: (){
-
-                                Navigator.of(context).push(CupertinoPageRoute(builder: (context)=> ViewOffer(_data[index])));
+                                  borderRadius: BorderRadius.circular(15)),
+                              onPressed: () {
+                                Navigator.of(context).push(CupertinoPageRoute(
+                                    builder: (context) =>
+                                        ViewOffer(historyData[index])));
                               },
                               color: Colors.orange,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text("Request Date",style: TextStyle(color: Colors.white),),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  "Request Date",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             )
-
                           ],
                         ),
                       ),
@@ -160,7 +133,6 @@ class ViewOffer extends StatefulWidget {
 }
 
 class _ViewOfferState extends State<ViewOffer> {
-
   List _notifications;
 
   @override
@@ -169,28 +141,15 @@ class _ViewOfferState extends State<ViewOffer> {
     super.initState();
 
     _notifications = [
-      {
-        "message": "Sandy want to go on a date with you",
-        "action": "accept"
-      },{
-        "message": "Sandy want to go on a date with you",
-        "action": "accept"
-      },{
-        "message": "Sandy want to go on a date with you",
-        "action": "accept"
-      },{
-        "message": "Sandy want to go on a date with you",
-        "action": "accept"
-      }
-      ,
+      {"message": "Sandy want to go on a date with you", "action": "accept"},
+      {"message": "Sandy want to go on a date with you", "action": "accept"},
+      {"message": "Sandy want to go on a date with you", "action": "accept"},
+      {"message": "Sandy want to go on a date with you", "action": "accept"},
     ];
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     final width = getWidth(context);
     final height = getHeight(context);
 
@@ -199,7 +158,7 @@ class _ViewOfferState extends State<ViewOffer> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
-            onPressed: ()=> Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pop(),
           ),
           centerTitle: true,
           title: Text("View Offer"),
@@ -207,24 +166,26 @@ class _ViewOfferState extends State<ViewOffer> {
         body: Container(
             width: width,
             height: height,
-            child: ListView.builder(itemBuilder: (context,ind)=> ListTile(
-              leading: CircleAvatar(
-                child: Icon(Icons.person),
-                backgroundColor: Colors.white,
+            child: ListView.builder(
+              itemBuilder: (context, ind) => ListTile(
+                leading: CircleAvatar(
+                  child: Icon(Icons.person),
+                  backgroundColor: Colors.white,
+                ),
+                title: Text(
+                  "${_notifications[ind]["message"]}",
+                  style: TextStyle(color: Colors.white),
+                ),
+                trailing: RaisedButton(
+                  onPressed: () {},
+                  color: Colors.orange,
+                  child: Text(
+                    "${_notifications[ind]["action"]}".toUpperCase(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
-              title: Text("${_notifications[ind]["message"]}",style: TextStyle(color: Colors.white),),
-              trailing: RaisedButton(
-                onPressed: (){
-
-                },
-                color: Colors.orange,
-                child: Text("${_notifications[ind]["action"]}".toUpperCase(),style: TextStyle(color: Colors.white),),
-              ),
-            ),
               itemCount: _notifications.length,
-            )
-
-        ));
+            )));
   }
 }
-

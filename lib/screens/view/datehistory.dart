@@ -5,6 +5,8 @@ import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/firebase_services/chat_manager.dart';
 import 'package:nubae/models/chatPart.dart';
 import 'package:nubae/utils/session_manager.dart';
+import 'package:nubae/firebase_services/likes_manager.dart';
+import 'package:nubae/screens/view/chat_screens/chatsPage.dart';
 
 class DateHistory extends StatefulWidget {
   @override
@@ -25,9 +27,11 @@ class _DateHistoryState extends State<DateHistory> {
     setState(() {
       historyData = _historyData;
     });
-    print("***************     ^^^^^^^^^^^^^^   ***************");
-    print(SessionManager.getUserId());
-    print(historyData.length);
+  }
+
+  addLikes(String likedUid) async {
+    print('object');
+    await LikesManager.addToLikes(SessionManager.getUserId(), likedUid);
   }
 
   convertTimeStamp(Timestamp timestamp) {
@@ -68,8 +72,10 @@ class _DateHistoryState extends State<DateHistory> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
                 child: InkWell(
-                    onTap: () => Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => ViewOffer(historyData[index]))),
+                    onTap: () {
+                      // Navigator.of(context).push(CupertinoPageRoute(
+                      //     builder: (context) => ViewOffer(historyData[index])));
+                    },
                     child: new GridTile(
                       child: Container(
                         padding:
@@ -99,9 +105,12 @@ class _DateHistoryState extends State<DateHistory> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
                               onPressed: () {
+                                addLikes(historyData[index].uid);
                                 Navigator.of(context).push(CupertinoPageRoute(
-                                    builder: (context) =>
-                                        ViewOffer(historyData[index])));
+                                    builder: (context) => ChatsPage()));
+                                // Navigator.of(context).push(CupertinoPageRoute(
+                                //     builder: (context) =>
+                                //         ViewOffer(historyData[index])));
                               },
                               color: Colors.orange,
                               child: Padding(

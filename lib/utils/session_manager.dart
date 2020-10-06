@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nubae/models/User.dart';
-import 'date_utils.dart';
+import 'package:nubae/firebase_services/subscribe_manager.dart';
 
 enum Login_Status { NEW_USER, LOGGED_IN, LOGGED_OUT }
 
@@ -17,6 +17,7 @@ class SessionManager {
   static final String KEY_PHONE = 'key_phone';
   static final String KEY_POSTALCODE = 'key_postalcode';
   static final String KEY_COUNTRY = 'key_country';
+  static final String KEY_USER_STATUS = 'key_user_status';
 
   static SharedPreferences _sharedPrefs;
 
@@ -43,6 +44,7 @@ class SessionManager {
     SessionManager.setPhone(userInfo.phone.toString());
     SessionManager.setPostalCode(userInfo.postalcode.toString());
     SessionManager.setCountry(userInfo.country);
+    SessionManager.setUserPaymentStatus(userInfo.uid);
   }
 
   static bool isLoggin() {
@@ -58,6 +60,16 @@ class SessionManager {
     _sharedPrefs.setString(KEY_USER_ID, userId);
   }
 
+  static String getUserStatus() {
+    return _sharedPrefs.getString(KEY_USER_STATUS) ?? '';
+  }
+
+  static void setUserPaymentStatus(String userId) async {
+    String userStatus = "";
+    userStatus = await SubscribeManager.getUserStatus(userId);
+    _sharedPrefs.setString(KEY_USER_STATUS, userStatus);
+  }
+
   static String getFirstName() {
     return _sharedPrefs.getString(KEY_FIRST_NAME) ?? '';
   }
@@ -65,7 +77,6 @@ class SessionManager {
   static void setFirstName(String firstname) {
     _sharedPrefs.setString(KEY_FIRST_NAME, firstname);
   }
-  
 
   static String getCountry() {
     return _sharedPrefs.getString(KEY_COUNTRY) ?? '';

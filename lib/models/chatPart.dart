@@ -8,36 +8,37 @@ class ChatPart {
   String lastMessage;
   int unseenCount;
   Timestamp timestamp;
-
-  ChatPart(
-    {
-      this.uid,
-      this.chatID,
-      this.name,
-      this.image,
-      this.lastMessage,
-      this.unseenCount,
-      this.timestamp,
-    }
-  );
+  Timestamp startDate;
+  ChatPart({
+    this.uid,
+    this.chatID,
+    this.name,
+    this.image,
+    this.lastMessage,
+    this.unseenCount,
+    this.timestamp,
+    this.startDate,
+  });
 
   ChatPart.fromJson(Map<dynamic, dynamic> json) {
-    uid = json["uid"];  
+    uid = json["uid"];
     chatID = json['chatID'];
     name = json['name'];
     image = json['image'];
     lastMessage = json['lastMessage'] != null ? json['lastMessage'] : "";
     unseenCount = json['unseenCount'];
     timestamp = json['timestamp'] != null ? json['timestamp'] : null;
+    startDate = json['startDate'] != null ? json['startDate'] : null;
   }
 
   Map<dynamic, dynamic> toJson() => {
-    "uid": uid,
-    "chatID" : chatID,
-    "name" : name,
-    "image" : image,
-    "lastMessage" : lastMessage,
-    "unseenCount" : unseenCount,
-    "timestamp" : timestamp,
-  };
+        "uid": uid,
+        "chatID": chatID,
+        "name": name,
+        "image": image,
+        "lastMessage": lastMessage,
+        "unseenCount": unseenCount,
+        "timestamp": timestamp,
+        "startDate": startDate,
+      };
 }

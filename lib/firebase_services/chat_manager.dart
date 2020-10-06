@@ -63,6 +63,7 @@ class ChatController {
           "timestamp": Timestamp.now(),
           "uid": receiverID,
           "unseenCount": 0,
+          "startDate" : Timestamp.now(),
         });
         String myImage =
             await ProfileManager.getProfileImage(SessionManager.getUserId());

@@ -73,12 +73,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   addLikes(String likedUid) async {
-    if (SessionManager.getUserStatus() == "Active") {
+    // if (SessionManager.getUserStatus() == "Active") {
       await LikesManager.addLikes(SessionManager.getUserId(), likedUid);
-    } else {
+    // } else {
       // if user is free user
 
-    }
+    // }
   }
 
   signOut() async {

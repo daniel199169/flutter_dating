@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Icons.person,
                                 color: Colors.white,
                               ),
-                              hintText: "User Name",
+                              hintText: "Email Address",
                               hintStyle: TextStyle(color: Colors.white)),
                         ),
                       ),

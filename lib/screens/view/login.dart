@@ -196,13 +196,13 @@ class _LoginPageState extends State<LoginPage> {
                     height: 30,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: Column(
                       children: [
                         Container(
                           width: width,
                           height: 50,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: FacebookSignInButton(
                               borderRadius: 30,
                               onPressed: () {
@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           height: 50,
                           width: width,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: GoogleSignInButton(
                             borderRadius: 30,
                             onPressed: () {},

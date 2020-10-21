@@ -91,6 +91,7 @@ class _SearchPageState extends State<SearchPage> {
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
         width: width,
         height: height,
+        child: SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -302,6 +303,6 @@ class _SearchPageState extends State<SearchPage> {
           ],
         ),
       ),
-    );
+    ),);
   }
 }

@@ -112,6 +112,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
+             child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
@@ -325,7 +326,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   color: Colors.white,
                 ),
               ],
-            ),
+            ),),
           ),
         ),
       ),

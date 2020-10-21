@@ -327,7 +327,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   myimages.myphoto1URL == null || myimages.myphoto1URL == ""
                       ? Stack(children: <Widget>[
                           Container(
-                            width: width * 0.45 + 10,
+                            width: width * 0.45 + 5,
                             height: MediaQuery.of(context).size.height * 0.4,
                             padding: EdgeInsets.only(
                                 left: 10.0, right: 10.0, top: 10, bottom: 10),

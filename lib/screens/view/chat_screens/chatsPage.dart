@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
+import 'package:nubae/screens/view/profile.dart';
 
 class ChatsPage extends StatefulWidget {
   @override
@@ -84,50 +85,84 @@ class _ChatsPageState extends State<ChatsPage> {
                         ),
                         itemCount: chatParts.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return MaterialButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                SlideRightRoute(
-                                    page: ChatPage(
-                                        chatID: chatParts[index].chatID,
-                                        receiverID: chatParts[index].uid,
-                                        receiverImage: chatParts[index].image,
-                                        receiverName: chatParts[index].name)),
-                              ).then((value) {
-                                if (chatParts[index].unseenCount > 0) {
-                                  readMessage(chatParts[index].uid);
-                                }
-                              });
-                              if (chatParts[index].unseenCount > 0) {
-                                readMessage(chatParts[index].uid);
-                              }
-                            },
-                            child: Container(
-                              height: 90,
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    child: chatParts[index].image == null ||
-                                            chatParts[index].image == ""
-                                        ? Center(
-                                            child: Text(
+                          return
+                              // Navigator.push(
+                              //   context,
+                              //   SlideRightRoute(
+                              //       page: ChatPage(
+                              //           chatID: chatParts[index].chatID,
+                              //           receiverID: chatParts[index].uid,
+                              //           receiverImage: chatParts[index].image,
+                              //           receiverName: chatParts[index].name)),
+                              // ).then((value) {
+                              //   if (chatParts[index].unseenCount > 0) {
+                              //     readMessage(chatParts[index].uid);
+                              //   }
+                              // });
+                              // if (chatParts[index].unseenCount > 0) {
+                              //   readMessage(chatParts[index].uid);
+                              // }
+                              // },
+                              // child:
+                              Container(
+                            height: 90,
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  child: chatParts[index].image == null ||
+                                          chatParts[index].image == ""
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                FadeRoute(
+                                                    page: ProfilePage(
+                                                  selecteduid:
+                                                      chatParts[index].uid,
+                                                )));
+                                          },
+                                          child: Center(
+                                              child: Text(
                                             chatParts[index].name[0],
                                             style: TextStyle(
                                                 fontSize: 25,
                                                 color: Colors.white),
-                                          ))
-                                        : CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                chatParts[index].image)),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(35),
-                                        color: Colors.blue),
-                                  ),
-                                  Expanded(
+                                          )))
+                                      : GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                FadeRoute(
+                                                    page: ProfilePage(
+                                                  selecteduid:
+                                                      chatParts[index].uid,
+                                                )));
+                                          },
+                                          child: CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  chatParts[index].image))),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: Colors.blue),
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          SlideRightRoute(
+                                              page: ChatPage(
+                                                  chatID:
+                                                      chatParts[index].chatID,
+                                                  receiverID:
+                                                      chatParts[index].uid,
+                                                  receiverImage:
+                                                      chatParts[index].image,
+                                                  receiverName:
+                                                      chatParts[index].name)));
+                                    },
                                     child: Padding(
                                       padding: EdgeInsets.only(left: 15),
                                       child: Column(
@@ -156,25 +191,39 @@ class _ChatsPageState extends State<ChatsPage> {
                                       ),
                                     ),
                                   ),
-                                  Text(
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        SlideRightRoute(
+                                            page: ChatPage(
+                                                chatID: chatParts[index].chatID,
+                                                receiverID:
+                                                    chatParts[index].uid,
+                                                receiverImage:
+                                                    chatParts[index].image,
+                                                receiverName:
+                                                    chatParts[index].name)));
+                                  },
+                                  child: Text(
                                     timeago.format(
                                         chatParts[index].timestamp.toDate()),
                                     style: TextStyle(color: Colors.grey),
                                   ),
-                                  SizedBox(width: 10),
-                                  chatParts[index].unseenCount > 0
-                                      ? Badge(
-                                          badgeContent: Text(
-                                            chatParts[index]
-                                                .unseenCount
-                                                .toString(),
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        )
-                                      : Container()
-                                ],
-                              ),
+                                ),
+                                SizedBox(width: 10),
+                                chatParts[index].unseenCount > 0
+                                    ? Badge(
+                                        badgeContent: Text(
+                                          chatParts[index]
+                                              .unseenCount
+                                              .toString(),
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )
+                                    : Container()
+                              ],
                             ),
                           );
                         },

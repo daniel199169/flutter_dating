@@ -12,6 +12,7 @@ import 'package:nubae/utils/session_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nubae/screens/view/chat_screens/chatsPage.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
+import 'package:nubae/screens/view/profile.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatPage extends StatefulWidget {
@@ -290,10 +291,15 @@ class _ChatPageState extends State<ChatPage> {
                       ? Container()
                       : widget.receiverImage != null &&
                               widget.receiverImage != ""
-                          ? CircleAvatar(
+                          ? GestureDetector(
+                            onTap: (){
+                               Navigator.push(context, FadeRoute(page: ProfilePage(selecteduid: chat.messages[index].senderID,)));
+                            },
+                            child: CircleAvatar(
                               backgroundImage:
                                   NetworkImage(widget.receiverImage),
-                            )
+                            ),)
+
                           : CircleAvatar(
                               child: Center(
                                   child: Text(

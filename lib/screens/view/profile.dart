@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nubae/utils/session_manager.dart';
 import 'package:path/path.dart' as Path;
 import 'dart:io';
 import 'package:nubae/models/ProfileImages.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
+import 'package:nubae/screens/custom_widgets/fade_transition.dart';
+import 'package:nubae/screens/view/search.dart';
 
 class ProfilePage extends StatefulWidget {
+  final String selecteduid;
+  ProfilePage({this.selecteduid});
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -36,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getImages() async {
     ProfileImages _getImages =
-        await ProfileManager.getImages(SessionManager.getUserId());
+        await ProfileManager.getImages(widget.selecteduid);
     setState(() {
       myimages = _getImages;
     });
@@ -44,14 +47,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getName() async {
     String _getName =
-        await ProfileManager.getUserName(SessionManager.getUserId());
+        await ProfileManager.getUserName(widget.selecteduid);
     setState(() {
       userName = _getName;
     });
   }
 
   getLocation() async {
-    String _city = await ProfileManager.getLocation(SessionManager.getUserId());
+    String _city = await ProfileManager.getLocation(widget.selecteduid);
     setState(() {
       city = _city;
     });
@@ -59,11 +62,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getHobby() async {
     String cuisineValue =
-        await ProfileManager.getHobbyCuisine(SessionManager.getUserId());
+        await ProfileManager.getHobbyCuisine(widget.selecteduid);
     String entertainmentValue =
-        await ProfileManager.getHobbyEntertainment(SessionManager.getUserId());
+        await ProfileManager.getHobbyEntertainment(widget.selecteduid);
     String recreationValue =
-        await ProfileManager.getHobbyRecreation(SessionManager.getUserId());
+        await ProfileManager.getHobbyRecreation(widget.selecteduid);
 
     setState(() {
       _cuisineValue = cuisineValue;
@@ -91,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
       //     tag: tag,
       //     reference: reference);
       // BuildderManager.updateCoverImage(
-      //     coverImage, SessionManager.getUserId(), widget.id, widget.type);
+      //     coverImage, widget.selecteduid, widget.id, widget.type);
       setState(() {
         if (imageType == "myimageURL") {
           myimages.myimageURL = fileURL;
@@ -146,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
         myphoto3URL: myimages.myphoto3URL,
       );
       await ProfileManager.updateImages(
-          sendmyImages, SessionManager.getUserId());
+          sendmyImages, widget.selecteduid);
     }
   }
 
@@ -161,7 +164,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     await ProfileManager.updateHobby(
-        hobbytype, content, SessionManager.getUserId());
+        hobbytype, content, widget.selecteduid);
   }
 
   @override
@@ -191,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop();
+                          Navigator.push(context, FadeRoute(page: SearchPage()));
                         },
                         child:
                             Icon(Icons.close, color: Colors.white, size: 30)),
@@ -229,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Container(
         width: width,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         height: height,
         child: SingleChildScrollView(
           child: Column(
@@ -247,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               myimages.myimageURL == null || myimages.myimageURL == ""
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -316,7 +319,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
+                height: MediaQuery.of(context).size.height * 0.1,
               ),
               Container(
                   // color: Colors.white,
@@ -536,6 +539,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ],
               )),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Text(
+                    "Select your date option",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),

@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
                 InkWell(
                   onTap: () =>
-                      Navigator.push(context, FadeRoute(page: ProfilePage())),
+                      Navigator.push(context, FadeRoute(page: ProfilePage(selecteduid: SessionManager.getUserId(),))),
                   child: Column(
                     children: [
                       myimages.myimageURL == ""

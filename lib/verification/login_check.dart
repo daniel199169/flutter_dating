@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nubae/firebase_services/authentication.dart';
 import 'package:nubae/screens/view/cloud_message.dart';
 import 'package:nubae/utils/session_manager.dart';
-import 'package:nubae/screens/view/search.dart';
+import 'package:nubae/screens/view/profile.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,
@@ -68,7 +68,7 @@ class _LoginCheckState extends State<LoginCheck> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return new SearchPage();
+          return new ProfilePage(selecteduid: SessionManager.getUserId(),);
         } else
           return buildWaitingScreen();
         break;

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nubae/models/User.dart';
 import 'basic_firebase.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:nubae/utils/session_manager.dart';
 
 enum Gender { male, female }
 
@@ -85,5 +86,13 @@ class UserManager {
         await Geolocator().distanceBetween(startlat, startlon, endlat, endlon);
 
     return distanceInMeters / 1000;
+  }
+
+  static addDeviceToken(String token) async{
+    String myUid = SessionManager.getUserId();
+    await db
+        .collection('Users')
+        .document(myUid)
+        .updateData({'DeviceToken': token});
   }
 }

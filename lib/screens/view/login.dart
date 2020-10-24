@@ -7,7 +7,7 @@ import 'package:nubae/screens/view/forgotpassword.dart';
 import 'package:nubae/screens/view/register.dart';
 import 'package:nubae/authentication/authentication.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
-import 'package:nubae/screens/view/search.dart';
+import 'package:nubae/screens/view/cloud_message.dart';
 import 'package:nubae/screens/view/profile.dart';
 import 'package:nubae/utils/session_manager.dart';
 
@@ -59,9 +59,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
             context,
             FadeRoute(
-                page: ProfilePage(
-              selecteduid: SessionManager.getUserId(),
-            )));
+                page: CloudMessage()));
       }
     }
 

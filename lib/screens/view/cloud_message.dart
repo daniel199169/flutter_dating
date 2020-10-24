@@ -3,9 +3,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:nubae/screens/view/homepage.dart';
+import 'package:nubae/firebase_services/user_manager.dart';
 import 'package:nubae/utils/session_manager.dart';
-import 'package:nubae/screens/view/login.dart';
+import 'package:nubae/screens/view/profile.dart';
 
 class CloudMessage extends StatelessWidget {
   @override
@@ -63,8 +63,11 @@ class _MessageHandlerState extends State<MessageHandler> {
         .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
-    _firebaseMessaging.getToken().then((String token) {
+    _firebaseMessaging.getToken().then((String token) async{
       assert(token != null);
+      print("---------   device token  ---------");
+      print(token);
+      await UserManager.addDeviceToken(token);
     });
   }
 
@@ -133,6 +136,6 @@ class _MessageHandlerState extends State<MessageHandler> {
 
   @override
   Widget build(BuildContext context) {
-    return new LoginPage();
+    return new ProfilePage(selecteduid: SessionManager.getUserId(),);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nubae/firebase_services/authentication.dart';
 import 'package:nubae/screens/view/cloud_message.dart';
+import 'package:nubae/screens/view/login.dart';
 import 'package:nubae/utils/session_manager.dart';
 import 'package:nubae/screens/view/profile.dart';
 
@@ -64,11 +65,11 @@ class _LoginCheckState extends State<LoginCheck> {
         return buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return new CloudMessage();
+        return new LoginPage();
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return new ProfilePage(selecteduid: SessionManager.getUserId(),);
+          return new CloudMessage();
         } else
           return buildWaitingScreen();
         break;

@@ -1,75 +1,38 @@
 {
   "project_info": {
-    "project_number": "112679823627",
-    "firebase_url": "https://nubae-c1b63.firebaseio.com",
-    "project_id": "nubae-c1b63",
-    "storage_bucket": "nubae-c1b63.appspot.com"
+    "project_number": "361882616024",
+    "firebase_url": "https://digital-display-287616.firebaseio.com",
+    "project_id": "digital-display-287616",
+    "storage_bucket": "digital-display-287616.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:112679823627:android:16246b243ff6a2b05e5a0e",
+        "mobilesdk_app_id": "1:361882616024:android:4c7de63b1ee1047ab3d7ad",
         "android_client_info": {
           "package_name": "com.android.nubae"
         }
       },
       "oauth_client": [
         {
-          "client_id": "112679823627-be3rdlsklgrv1m1ap1108fpsuue1bcid.apps.googleusercontent.com",
+          "client_id": "361882616024-j0jnqkle37erb79693c5aumk8mn869vu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyABaCLqIlT9kKkqCQ30UUm37oiw6TeqcUQ"
+          "current_key": "AIzaSyCkrUAkg6slEohHYFOAgAaFuF9nyskAZaE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "112679823627-be3rdlsklgrv1m1ap1108fpsuue1bcid.apps.googleusercontent.com",
+              "client_id": "361882616024-j0jnqkle37erb79693c5aumk8mn869vu.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "112679823627-sheadlov4716s82lfe25mpha30roolme.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.dating.nubae",
-                "app_store_id": "1533294742"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:112679823627:android:3c7c673377167ef45e5a0e",
-        "android_client_info": {
-          "package_name": "com.example.nubae"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "112679823627-be3rdlsklgrv1m1ap1108fpsuue1bcid.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyABaCLqIlT9kKkqCQ30UUm37oiw6TeqcUQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "112679823627-be3rdlsklgrv1m1ap1108fpsuue1bcid.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "112679823627-sheadlov4716s82lfe25mpha30roolme.apps.googleusercontent.com",
+              "client_id": "361882616024-d49a5olarqit8oiejmsohfkased3nok6.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.dating.nubae",

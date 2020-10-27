@@ -1,4 +1,4 @@
-package com.example.nubae
+package com.android.nubae
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

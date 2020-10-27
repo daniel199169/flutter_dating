@@ -60,15 +60,19 @@ class ProfileManager {
   }
 
   static Future<String> getUserName(String uid) async {
+    String result = "";
     QuerySnapshot querySnapshot = await db
         .collection("Users")
         .where('uid', isEqualTo: uid)
         .getDocuments();
 
-    if (querySnapshot.documents[0]['userName'] == null) {
+    if (querySnapshot.documents[0]['firstName'] == null) {
       return "";
     } else {
-      return querySnapshot.documents[0]['userName'];
+      String firstName = querySnapshot.documents[0]['firstName'];
+      String lastName = querySnapshot.documents[0]['lastName'];
+      result = firstName + " " + lastName;
+      return result;
     }
   }
 

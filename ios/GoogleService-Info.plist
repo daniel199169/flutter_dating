@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>112679823627-sheadlov4716s82lfe25mpha30roolme.apps.googleusercontent.com</string>
+	<string>361882616024-d49a5olarqit8oiejmsohfkased3nok6.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.112679823627-sheadlov4716s82lfe25mpha30roolme</string>
+	<string>com.googleusercontent.apps.361882616024-d49a5olarqit8oiejmsohfkased3nok6</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBoQaOw2PRRu5mkLtBxw5eimgBiuAxhYpw</string>
+	<string>AIzaSyCSNqXKypq1hIuysijFN1EPR9FV2-ePSsI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>112679823627</string>
+	<string>361882616024</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.dating.nubae</string>
 	<key>PROJECT_ID</key>
-	<string>nubae-c1b63</string>
+	<string>digital-display-287616</string>
 	<key>STORAGE_BUCKET</key>
-	<string>nubae-c1b63.appspot.com</string>
+	<string>digital-display-287616.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:112679823627:ios:17dff8613ed7259c5e5a0e</string>
+	<string>1:361882616024:ios:af4eba8885273e91b3d7ad</string>
 	<key>DATABASE_URL</key>
-	<string>https://nubae-c1b63.firebaseio.com</string>
+	<string>https://digital-display-287616.firebaseio.com</string>
 </dict>
 </plist>

@@ -75,6 +75,7 @@ class DateAuth implements BaseAuth {
             "firstName": firstname,
             "lastName": lastname,
             "email": email,
+            "password": password,
             "age": age,
             "male": maleGender,
             "race": race,

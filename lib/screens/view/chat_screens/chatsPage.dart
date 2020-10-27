@@ -99,9 +99,7 @@ class _ChatsPageState extends State<ChatsPage> {
                               //     readMessage(chatParts[index].uid);
                               //   }
                               // });
-                              // if (chatParts[index].unseenCount > 0) {
-                              //   readMessage(chatParts[index].uid);
-                              // }
+
                               // },
                               // child:
                               Container(
@@ -150,6 +148,9 @@ class _ChatsPageState extends State<ChatsPage> {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
+                                      if (chatParts[index].unseenCount > 0) {
+                                        readMessage(chatParts[index].uid);
+                                      }
                                       Navigator.push(
                                           context,
                                           SlideRightRoute(
@@ -194,6 +195,9 @@ class _ChatsPageState extends State<ChatsPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
+                                    if (chatParts[index].unseenCount > 0) {
+                                      readMessage(chatParts[index].uid);
+                                    }
                                     Navigator.push(
                                         context,
                                         SlideRightRoute(

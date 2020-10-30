@@ -4,16 +4,17 @@ import 'package:nubae/firebase_services/profile_manager.dart';
 import 'package:nubae/models/Like.dart';
 
 class LikesManager {
-  static Future<void> addLikes(String myuid, String likeduid) async {
-    await db
-        .collection("Users")
-        .document(myuid)
-        .collection("chats")
-        .document(likeduid)
-        .get()
-        .then((doc) async {
-      if (doc.exists) {
-      } else {
+  static addLikes(String myuid, String likeduid) async {
+    String result = "";
+    // await db
+    //     .collection("Users")
+    //     .document(myuid)
+    //     .collection("chats")
+    //     .document(likeduid)
+    //     .get()
+    //     .then((doc) async {
+    //   if (doc.exists) {
+    //   } else {
         QuerySnapshot docSnapShot = await db
             .collection("Likes")
             .where('myuid', isEqualTo: myuid)
@@ -29,9 +30,13 @@ class LikesManager {
             "imageformyuid": userImage,
             "userNameFormyuid": userName
           });
+          result = "not exist";
+        } else {
+          result = "exist";
         }
-      }
-    });
+      // }
+    // });
+    return result;
   }
 
   static Future<void> addToLikes(String myuid, String likeduid) async {

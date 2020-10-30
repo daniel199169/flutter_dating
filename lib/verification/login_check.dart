@@ -62,7 +62,7 @@ class _LoginCheckState extends State<LoginCheck> {
 
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
-        return buildWaitingScreen();
+        return LoginPage();
         break;
       case AuthStatus.NOT_LOGGED_IN:
         return new LoginPage();
@@ -71,10 +71,10 @@ class _LoginCheckState extends State<LoginCheck> {
         if (_userId.length > 0 && _userId != null) {
           return new CloudMessage();
         } else
-          return buildWaitingScreen();
+          return LoginPage();
         break;
       default:
-        return buildWaitingScreen();
+        return LoginPage();
     }
   }
 }

@@ -30,7 +30,7 @@ class _DateHistoryState extends State<DateHistory> {
   }
 
   addLikes(String likedUid) async {
-    print('object');
+    
     await LikesManager.addToLikes(SessionManager.getUserId(), likedUid);
   }
 

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:nubae/screens/view/constants.dart';
 import 'package:nubae/firebase_services/user_manager.dart';
 import 'package:nubae/models/User.dart';
+import 'package:nubae/firebase_services/likes_manager.dart';
+import 'package:nubae/utils/session_manager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ExploreProfilePage extends StatefulWidget {
   final User userDetails;
@@ -16,6 +19,14 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<String> addLikes(String likedUid) async {
+    String result =
+        await LikesManager.addLikes(SessionManager.getUserId(), likedUid);
+    print("---------    --------");
+    print(result);
+    return result;
   }
 
   @override
@@ -76,7 +87,8 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
                   padding: EdgeInsets.all(15),
                   alignment: Alignment.bottomLeft,
                   height: height * 0.25,
-                  child: Text("${widget.userDetails.firstName + " " + widget.userDetails.lastName}",
+                  child: Text(
+                      "${widget.userDetails.firstName + " " + widget.userDetails.lastName}",
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
@@ -104,7 +116,6 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
                           style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
-                      
                       Container(height: 0.3, color: Colors.white),
                       Padding(
                         padding: EdgeInsets.only(top: 15),
@@ -127,7 +138,18 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         color: Colors.orange,
-                        onPressed: () {},
+                        onPressed: () async {
+                          String likeStatus =
+                              await addLikes(widget.userDetails.uid);
+                          print(likeStatus);
+                          if (likeStatus == 'exist') {
+                            Fluttertoast.showToast(
+                                msg: "You have already sent request!");
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "sent date request successfully!");
+                          }
+                        },
                         child: Container(
                           height: 50,
                           alignment: Alignment.center,

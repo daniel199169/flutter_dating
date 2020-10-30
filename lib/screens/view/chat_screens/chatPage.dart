@@ -12,7 +12,7 @@ import 'package:nubae/utils/session_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nubae/screens/view/chat_screens/chatsPage.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
-import 'package:nubae/screens/view/profile.dart';
+import 'package:nubae/screens/view/other_profile.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatPage extends StatefulWidget {
@@ -62,6 +62,10 @@ class _ChatPageState extends State<ChatPage> {
         type: "text",
       ),
     );
+  }
+
+  checkPossibleChat(String chatID) async {
+    
   }
 
   updateTypingStatus(bool isTyping) async {
@@ -228,16 +232,32 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         GestureDetector(
                             onTap: () {
-                              if (isTyping == true) {
-                                setState(() {
-                                  isTyping = false;
-                                });
-                                updateTypingStatus(isTyping);
-                              }
-                              if (_formKey.currentState.validate()) {
-                                sendMessage();
-                                _formKey.currentState.reset();
-                                messageController.clear();
+                              if (SessionManager.getUserStatus() ==
+                                  "Inactive") {
+                                // checkPossibleChat()
+                                 if (isTyping == true) {
+                                  setState(() {
+                                    isTyping = false;
+                                  });
+                                  updateTypingStatus(isTyping);
+                                }
+                                if (_formKey.currentState.validate()) {
+                                  sendMessage();
+                                  _formKey.currentState.reset();
+                                  messageController.clear();
+                                }
+                              } else {
+                                if (isTyping == true) {
+                                  setState(() {
+                                    isTyping = false;
+                                  });
+                                  updateTypingStatus(isTyping);
+                                }
+                                if (_formKey.currentState.validate()) {
+                                  sendMessage();
+                                  _formKey.currentState.reset();
+                                  messageController.clear();
+                                }
                               }
                             },
                             child: Text(
@@ -292,14 +312,20 @@ class _ChatPageState extends State<ChatPage> {
                       : widget.receiverImage != null &&
                               widget.receiverImage != ""
                           ? GestureDetector(
-                            onTap: (){
-                               Navigator.push(context, FadeRoute(page: ProfilePage(selecteduid: chat.messages[index].senderID,)));
-                            },
-                            child: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(widget.receiverImage),
-                            ),)
-
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    FadeRoute(
+                                        page: OtherProfilePage(
+                                      selecteduid:
+                                          chat.messages[index].senderID,
+                                    )));
+                              },
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(widget.receiverImage),
+                              ),
+                            )
                           : CircleAvatar(
                               child: Center(
                                   child: Text(
@@ -356,7 +382,8 @@ class _ChatPageState extends State<ChatPage> {
                                           chat.messages[index].senderID !=
                                                   SessionManager.getUserId()
                                               ? widget.receiverName[0]
-                                              : SessionManager.getFirstName() + SessionManager.getLastName(),
+                                              : SessionManager.getFirstName() +
+                                                  SessionManager.getLastName(),
                                           style: TextStyle(
                                               fontSize: 100,
                                               color: Colors.white),

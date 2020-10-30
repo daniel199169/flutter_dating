@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
-import 'package:nubae/screens/view/profile.dart';
+import 'package:nubae/screens/view/other_profile.dart';
 
 class ChatsPage extends StatefulWidget {
   @override
@@ -54,9 +54,26 @@ class _ChatsPageState extends State<ChatsPage> {
           }
 
           List<ChatPart> chatParts = new List<ChatPart>();
+          List<ChatPart> _chatParts = new List<ChatPart>();
           snapshot.data.documents.forEach((document) {
             chatParts.add(ChatPart.fromJson(document.data));
           });
+
+          // final now = new DateTime.now();
+          // print("=============== ---------------- ===============");
+          // print(_chatParts[0].timestamp.toString());
+
+          // for (int i = 0; i < _chatParts.length; i++) {
+          //   if (SessionManager.getUserStatus() == "Inactive") {
+          //     int difftimes =
+          //         now.difference(_chatParts[i].startDate.toDate()).inHours;
+          //     if (difftimes < 24) {
+          //       chatParts.add(_chatParts[i]);
+          //     }
+          //   } else {
+          //     chatParts.add(_chatParts[i]);
+          //   }
+          // }
 
           if (chatParts.length > 0) {
             return Container(
@@ -116,7 +133,7 @@ class _ChatsPageState extends State<ChatsPage> {
                                             Navigator.push(
                                                 context,
                                                 FadeRoute(
-                                                    page: ProfilePage(
+                                                    page: OtherProfilePage(
                                                   selecteduid:
                                                       chatParts[index].uid,
                                                 )));
@@ -133,7 +150,7 @@ class _ChatsPageState extends State<ChatsPage> {
                                             Navigator.push(
                                                 context,
                                                 FadeRoute(
-                                                    page: ProfilePage(
+                                                    page: OtherProfilePage(
                                                   selecteduid:
                                                       chatParts[index].uid,
                                                 )));

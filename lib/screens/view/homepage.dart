@@ -239,6 +239,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                     // Navigator.of(context).push(CupertinoPageRoute(
                     //     builder: (context) => ExplorePage()));
+                  
                   },
                   child: Column(
                     children: [

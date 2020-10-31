@@ -32,6 +32,7 @@ class LikesManager {
           });
           result = "not exist";
         } else {
+          docSnapShot.documents[0].reference.updateData({'likeduid': likeduid});
           result = "exist";
         }
       // }

@@ -144,7 +144,7 @@ class _ExploreProfilePageState extends State<ExploreProfilePage> {
                           print(likeStatus);
                           if (likeStatus == 'exist') {
                             Fluttertoast.showToast(
-                                msg: "You have already sent request!");
+                                msg: "You have already dating with this user!");
                           } else {
                             Fluttertoast.showToast(
                                 msg: "sent date request successfully!");

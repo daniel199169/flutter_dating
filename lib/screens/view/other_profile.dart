@@ -20,7 +20,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
   String _cuisineValue = "";
   String _entertainmentValue = "";
   String _recreationValue = "";
-  File _image;
+ 
 
   ProfileImages myimages;
   String userName = "";
@@ -139,21 +139,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                             padding: EdgeInsets.only(top: 10.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                IconTheme(
-                                  data: new IconThemeData(color: Colors.black),
-                                  child: new Icon(Icons.camera_enhance),
-                                ),
-                                Text(
-                                  'Add Image',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'Roboto Medium',
-                                    color: Colors.black,
-                                  ),
-                                )
-                              ],
+                              children: <Widget>[],
                             ),
                           ),
                         ),
@@ -222,22 +208,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    IconTheme(
-                                      data: new IconThemeData(
-                                          color: Colors.white),
-                                      child: new Icon(Icons.camera_enhance),
-                                    ),
-                                    Text(
-                                      'Add Image',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontFamily: 'Roboto Medium',
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
+                                  children: <Widget>[],
                                 ),
                               ),
                             ),
@@ -290,22 +261,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                           CrossAxisAlignment.center,
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        IconTheme(
-                                          data: new IconThemeData(
-                                              color: Colors.white),
-                                          child: new Icon(Icons.camera_enhance),
-                                        ),
-                                        Text(
-                                          'Add Image',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: 'Roboto Medium',
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      ],
+                                      children: <Widget>[],
                                     ),
                                   ),
                                 ),
@@ -358,20 +314,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
-                                        IconTheme(
-                                          data: new IconThemeData(
-                                              color: Colors.white),
-                                          child: new Icon(Icons.camera_enhance),
-                                        ),
-                                        Text(
-                                          'Add Image',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: 'Roboto Medium',
-                                            color: Colors.white,
-                                          ),
-                                        )
+                                        
                                       ],
                                     ),
                                   ),
@@ -504,3 +447,5 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
     );
   }
 }
+
+

@@ -6,6 +6,7 @@ import 'package:nubae/screens/view/subscription.dart';
 import 'package:nubae/screens/view/setting_subpages/aboutus.dart';
 import 'package:nubae/screens/view/setting_subpages/contact_us.dart';
 import 'package:nubae/screens/view/setting_subpages/privacy_policy.dart';
+import 'package:nubae/screens/view/setting_subpages/termsandconditions.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -86,13 +87,17 @@ class _SettingsPageState extends State<SettingsPage> {
               //       "Help Center",
               //       style: TextStyle(color: Colors.white, fontSize: 18),
               //     )),
-              // Container(
-              //     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              //     width: width,
-              //     child: Text(
-              //       "Terms & Conditions",
-              //       style: TextStyle(color: Colors.white, fontSize: 18),
-              //     )),
+              InkWell(
+                  onTap: () => Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => TermsAndConditionsPage())),
+                  child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                      width: width,
+                      child: Text(
+                        "Terms & Conditions",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ))),
               InkWell(
                   onTap: () => Navigator.of(context).push(CupertinoPageRoute(
                       builder: (context) => PrivacyPolicyPage())),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nubae/firebase_services/authentication.dart';
+import 'package:nubae/authentication/authentication.dart';
 import 'package:nubae/screens/view/cloud_message.dart';
 import 'package:nubae/screens/view/login.dart';
 import 'package:nubae/utils/session_manager.dart';
@@ -28,7 +28,7 @@ class _LoginCheckState extends State<LoginCheck> {
   void initState() {
     super.initState();
     // SessionManager.handleClearAllSettging();
-    Auth().getCurrentUser().then((user) {
+    DateAuth().getCurrentUser().then((user) {
       setState(() {
         if (user != null) {
           _userId = user?.uid;

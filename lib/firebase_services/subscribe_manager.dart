@@ -125,4 +125,15 @@ class SubscribeManager {
     });
     return result;
   }
+  
+  static deleteSubscribe(String uid) async{
+    QuerySnapshot docSnapShot2 = await db
+        .collection('Subscribes')
+        .where('uid', isEqualTo: uid)
+        .getDocuments();
+
+    if (docSnapShot2.documents.length == 1) {
+      docSnapShot2.documents[0].reference.delete();
+    }
+  }
 }

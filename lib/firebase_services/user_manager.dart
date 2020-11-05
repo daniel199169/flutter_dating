@@ -3,6 +3,11 @@ import 'package:nubae/models/User.dart';
 import 'basic_firebase.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:nubae/utils/session_manager.dart';
+import 'package:nubae/firebase_services/chat_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nubae/firebase_services/likes_manager.dart';
+import 'package:nubae/firebase_services/subscribe_manager.dart';
+import 'package:nubae/authentication/authentication.dart';
 
 enum Gender { male, female }
 
@@ -88,11 +93,37 @@ class UserManager {
     return distanceInMeters / 1000;
   }
 
-  static addDeviceToken(String token) async{
+  static addDeviceToken(String token) async {
     String myUid = SessionManager.getUserId();
     await db
         .collection('Users')
         .document(myUid)
         .updateData({'DeviceToken': token});
+  }
+
+  static deleteUser(String uid) async {
+    QuerySnapshot docSnapShot1 = await db
+        .collection('Users')
+        .where('uid', isEqualTo: uid)
+        .getDocuments();
+
+    if (docSnapShot1.documents.length == 1) {
+      docSnapShot1.documents[0].reference.delete();
+    }
+  }
+
+  static deleteAccount(String uid) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    user.delete();
+
+    SubscribeManager.deleteSubscribe(uid);
+    LikesManager.deleteLikeForUid(uid);
+
+    // Delete chat
+    await ChatController.deleteAllChats();
+    // Delete Users' chatParts chatting with this account
+    await DateAuth.deleteAllChatParts();
+
+    deleteUser(uid);
   }
 }

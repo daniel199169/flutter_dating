@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:nubae/firebase_services/authentication.dart';
+import 'package:nubae/authentication/authentication.dart';
 import 'package:nubae/verification/login_check.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
 
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigationPage() async {
-    Navigator.push(context, FadeRoute(page: LoginCheck(auth: new Auth())));
+    Navigator.push(context, FadeRoute(page: LoginCheck(auth: new DateAuth())));
   }
 
   @override

@@ -7,7 +7,6 @@ import 'package:nubae/models/message.dart';
 import 'package:nubae/screens/view/custom/slideLeftRoute.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:nubae/firebase_services/authentication.dart';
 import 'package:nubae/utils/session_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nubae/screens/view/chat_screens/chatsPage.dart';

@@ -7,7 +7,11 @@ import 'dart:io';
 import 'package:nubae/models/ProfileImages.dart';
 import 'package:nubae/firebase_services/profile_manager.dart';
 import 'package:nubae/screens/custom_widgets/fade_transition.dart';
+import 'package:nubae/custom_widgets/custom_yes_cancel_dialog.dart';
 import 'package:nubae/screens/view/search.dart';
+import 'package:nubae/utils/session_manager.dart';
+import 'package:nubae/firebase_services/user_manager.dart';
+import 'package:nubae/verification/login_check.dart';
 
 class ProfilePage extends StatefulWidget {
   final String selecteduid;
@@ -46,8 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   getName() async {
-    String _getName =
-        await ProfileManager.getUserName(widget.selecteduid);
+    String _getName = await ProfileManager.getUserName(widget.selecteduid);
     setState(() {
       userName = _getName;
     });
@@ -58,6 +61,23 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       city = _city;
     });
+  }
+
+  deleteAccount(String uid) async {
+    await UserManager.deleteAccount(uid);
+    signOut();
+  }
+
+  signOut() async {
+    try {
+      SessionManager.handleClearAllSettging();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => LoginCheck()),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   getHobby() async {
@@ -148,8 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
         myphoto2URL: myimages.myphoto2URL,
         myphoto3URL: myimages.myphoto3URL,
       );
-      await ProfileManager.updateImages(
-          sendmyImages, widget.selecteduid);
+      await ProfileManager.updateImages(sendmyImages, widget.selecteduid);
     }
   }
 
@@ -163,8 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
       content = _recreationValue;
     }
 
-    await ProfileManager.updateHobby(
-        hobbytype, content, widget.selecteduid);
+    await ProfileManager.updateHobby(hobbytype, content, widget.selecteduid);
   }
 
   @override
@@ -194,7 +212,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     GestureDetector(
                         onTap: () {
-                          Navigator.push(context, FadeRoute(page: SearchPage()));
+                          Navigator.push(
+                              context, FadeRoute(page: SearchPage()));
                         },
                         child:
                             Icon(Icons.close, color: Colors.white, size: 30)),
@@ -219,7 +238,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       icon:
                           Icon(Icons.more_vert, size: 30, color: Colors.white),
                       onSelected: (value) async {
-                        if (value == "Delete") {}
+                        if (value == "Delete") {
+                          ConfirmAction _selAction =
+                              await CustomYesCancelDialog(context,
+                                  title: 'Are you want to delete your account?',
+                                  content: '');
+                          if (_selAction == ConfirmAction.YES) {
+                            deleteAccount(SessionManager.getUserId());
+                          }
+                          if (_selAction == ConfirmAction.NO) {
+                            return;
+                          }
+                        }
                       },
                       color: Colors.black,
                     ),

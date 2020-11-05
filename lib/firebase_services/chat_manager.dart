@@ -63,7 +63,7 @@ class ChatController {
           "timestamp": Timestamp.now(),
           "uid": receiverID,
           "unseenCount": 0,
-          "startDate" : Timestamp.now(),
+          "startDate": Timestamp.now(),
         });
         String myImage =
             await ProfileManager.getProfileImage(SessionManager.getUserId());
@@ -158,5 +158,37 @@ class ChatController {
       return ChatPart.fromJson(doc.data);
     }).toList();
     return _list;
+  }
+
+  static Future<void> deleteAllChats() async {
+    // Delete from Chats
+    QuerySnapshot docSnapShot5 = await db
+        .collection("Users")
+        .document(SessionManager.getUserId())
+        .collection("chats")
+        .getDocuments();
+    if (docSnapShot5.documents.length > 0) {
+      List<ChatPart> _list = [];
+
+      _list = docSnapShot5.documents.map((doc) {
+        return ChatPart.fromJson(doc.data);
+      }).toList();
+
+      print("---------   list  -------");
+      print(_list.length);
+
+      for (int i = 0; i < _list.length; i++) {
+        QuerySnapshot docSnapShot6 = await db
+            .collection('Chats')
+            .where('id', isEqualTo: _list[i].chatID)
+            .getDocuments();
+
+        if (docSnapShot6.documents.length == 1) {
+          docSnapShot6.documents[0].reference.delete();
+        }
+      }
+    } else {
+      print("============ doc is not exist  ==========");
+    }
   }
 }

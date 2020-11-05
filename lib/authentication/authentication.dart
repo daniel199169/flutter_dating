@@ -7,7 +7,9 @@ import 'package:nubae/utils/session_manager.dart';
 import 'package:nubae/models/User.dart';
 
 abstract class BaseAuth {
-  // Future<String> signIn(String email, String password);
+  
+  Future<FirebaseUser> getCurrentUser();
+  
   Future<String> signIn(String email, String password);
 
   Future<String> signUp(
@@ -128,4 +130,46 @@ class DateAuth implements BaseAuth {
       return false;
     });
   }
+  static Future<void> deleteChat(String receiverID) async {
+    await db.collection("Users")
+      .document(SessionManager.getUserId())
+      .collection("chats")
+      .document(receiverID)
+      .delete();
+
+    await db.collection("Users")
+      .document(receiverID)
+      .collection("chats")
+      .document(SessionManager.getUserId())
+      .delete();
+  }
+
+  static Future<void> deleteAllChatParts() async {
+    QuerySnapshot docSnapShot = await db
+      .collection("Users")
+      .getDocuments();
+
+    await db.collection("Users")
+      .document(SessionManager.getUserId())
+      .collection("chats")
+      .getDocuments().then((snapshot) {
+        for(DocumentSnapshot ds in snapshot.documents){
+          ds.reference.delete();
+        }
+      });
+    
+    for(int i=0; i < docSnapShot.documents.length; i++){
+      await db.collection("Users")
+        .document(docSnapShot.documents[i]['uid'])
+        .collection("chats")
+        .document(SessionManager.getUserId())
+        .delete();
+    }
+  }
+  
+  Future<FirebaseUser> getCurrentUser() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return user;
+  }
+
 }

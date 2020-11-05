@@ -15,27 +15,27 @@ class LikesManager {
     //     .then((doc) async {
     //   if (doc.exists) {
     //   } else {
-        QuerySnapshot docSnapShot = await db
-            .collection("Likes")
-            .where('myuid', isEqualTo: myuid)
-            .where('likeduid', isEqualTo: likeduid)
-            .getDocuments();
+    QuerySnapshot docSnapShot = await db
+        .collection("Likes")
+        .where('myuid', isEqualTo: myuid)
+        .where('likeduid', isEqualTo: likeduid)
+        .getDocuments();
 
-        if (docSnapShot == null || docSnapShot.documents.length == 0) {
-          String userName = await ProfileManager.getUserName(myuid);
-          String userImage = await ProfileManager.getProfileImage(myuid);
-          await db.collection('Likes').document().setData({
-            "myuid": myuid,
-            "likeduid": likeduid,
-            "imageformyuid": userImage,
-            "userNameFormyuid": userName
-          });
-          result = "not exist";
-        } else {
-          docSnapShot.documents[0].reference.updateData({'likeduid': likeduid});
-          result = "exist";
-        }
-      // }
+    if (docSnapShot == null || docSnapShot.documents.length == 0) {
+      String userName = await ProfileManager.getUserName(myuid);
+      String userImage = await ProfileManager.getProfileImage(myuid);
+      await db.collection('Likes').document().setData({
+        "myuid": myuid,
+        "likeduid": likeduid,
+        "imageformyuid": userImage,
+        "userNameFormyuid": userName
+      });
+      result = "not exist";
+    } else {
+      docSnapShot.documents[0].reference.updateData({'likeduid': likeduid});
+      result = "exist";
+    }
+    // }
     // });
     return result;
   }
@@ -89,6 +89,26 @@ class LikesManager {
         .collection('Likes')
         .where('myuid', isEqualTo: likedUid)
         .where('likeduid', isEqualTo: myUid)
+        .getDocuments();
+
+    if (docSnapShot1.documents.length > 0) {
+      docSnapShot1.documents[0].reference.delete();
+    }
+  }
+
+  static deleteLikeForUid(String uid) async {
+    QuerySnapshot docSnapShot = await db
+        .collection('Likes')
+        .where('myuid', isEqualTo: uid)
+        .getDocuments();
+
+    if (docSnapShot.documents.length > 0) {
+      docSnapShot.documents[0].reference.delete();
+    }
+
+    QuerySnapshot docSnapShot1 = await db
+        .collection('Likes')
+        .where('likeduid', isEqualTo: uid)
         .getDocuments();
 
     if (docSnapShot1.documents.length > 0) {
